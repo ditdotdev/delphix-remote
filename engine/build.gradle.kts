@@ -27,7 +27,7 @@ dependencies {
 // Maven publishing configuration
 val mavenBucket = when(project.hasProperty("mavenBucket")) {
     true -> project.property("mavenBucket")
-    false -> "titan-data-maven"
+    false -> "datadatdat-maven"
 }
 
 publishing {
