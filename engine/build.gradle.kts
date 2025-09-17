@@ -20,7 +20,7 @@ val jar by tasks.getting(Jar::class) {
 dependencies {
     compile(kotlin("stdlib"))
     compile(kotlin("reflect"))
-    compile("org.json:json:20190722")
+    compile("org.json:json:20250517")
     compile("com.squareup.okhttp3:okhttp:4.2.2")
 }
 
