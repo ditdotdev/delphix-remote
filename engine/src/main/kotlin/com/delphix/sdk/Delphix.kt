@@ -26,15 +26,21 @@ import com.delphix.sdk.repos.SourceEnvironment
 import com.delphix.sdk.repos.TimeflowSnapshot
 
 open class Delphix(
-    var http: Http
+    var http: Http,
 ) {
     val loginResource: String = "/resources/json/delphix/login"
 
-    fun requestLogin(username: String, password: String): Map<String, String> {
+    fun requestLogin(
+        username: String,
+        password: String,
+    ): Map<String, String> {
         return mapOf("type" to "LoginRequest", "username" to username, "password" to password)
     }
 
-    open fun login(username: String, password: String) {
+    open fun login(
+        username: String,
+        password: String,
+    ) {
         http.setSession()
         http.handlePost(loginResource, requestLogin(username, password))
     }

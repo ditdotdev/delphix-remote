@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * The generic source environment schema.
  */
 class SourceEnvironment(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/environment"
 
@@ -39,7 +39,10 @@ class SourceEnvironment(
     /**
      * Update the specified SourceEnvironment object.
      */
-    fun update(ref: String, payload: com.delphix.sdk.objects.SourceEnvironment): JSONObject {
+    fun update(
+        ref: String,
+        payload: com.delphix.sdk.objects.SourceEnvironment,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 

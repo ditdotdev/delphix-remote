@@ -8,12 +8,12 @@ package com.delphix.sdk.objects
  */
 open class DeleteParameters(
     open val force: Boolean? = null, // Flag indicating whether to continue the operation upon failures.
-    override val type: String = "DeleteParameters"
+    override val type: String = "DeleteParameters",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "force" to force,
-            "type" to type
+            "type" to type,
         )
     }
 }

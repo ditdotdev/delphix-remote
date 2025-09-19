@@ -11,5 +11,6 @@ interface TimeflowPoint : TypedObject {
     val timeflow: String? // Reference to TimeFlow containing this point.
     val timestamp: String? // The logical time corresponding to the TimeFlow location.
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

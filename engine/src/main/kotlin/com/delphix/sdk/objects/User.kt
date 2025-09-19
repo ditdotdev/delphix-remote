@@ -26,7 +26,7 @@ open class User(
     open val userType: String? = null, // Type of user.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "User"
+    override val type: String = "User",
 ) : NamedUserObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -49,7 +49,7 @@ open class User(
             "userType" to userType,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }

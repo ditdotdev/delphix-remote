@@ -11,7 +11,7 @@ open class TimeflowBookmarkCreateParameters(
     open val name: String? = null, // The bookmark name.
     open val tag: String? = null, // A tag for the bookmark that can be used to group bookmarks together or qualify the type of the bookmark.
     open val timeflowPoint: TimeflowPoint? = null, // The TimeFlow point which is referenced by this bookmark.
-    override val type: String = "TimeflowBookmarkCreateParameters"
+    override val type: String = "TimeflowBookmarkCreateParameters",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -19,7 +19,7 @@ open class TimeflowBookmarkCreateParameters(
             "name" to name,
             "tag" to tag,
             "timeflowPoint" to timeflowPoint,
-            "type" to type
+            "type" to type,
         )
     }
 }

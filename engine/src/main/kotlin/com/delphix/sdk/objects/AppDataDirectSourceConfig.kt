@@ -17,7 +17,7 @@ open class AppDataDirectSourceConfig(
     override val linkingEnabled: Boolean? = null, // Whether this source should be used for linking.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "AppDataDirectSourceConfig"
+    override val type: String = "AppDataDirectSourceConfig",
 ) : AppDataSourceConfig {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -31,7 +31,7 @@ open class AppDataDirectSourceConfig(
             "linkingEnabled" to linkingEnabled,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }

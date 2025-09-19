@@ -12,7 +12,7 @@ open class AppDataSourceRuntime(
     override val enabled: String? = null, // Status indicating whether the source is enabled. A source has a 'PARTIAL' status if its sub-sources are not all enabled.
     override val notAccessibleReason: String? = null, // The reason why the source is not JDBC accessible.
     override val status: String? = null, // Status of the source. 'Unknown' if all attempts to connect to the source failed.
-    override val type: String = "AppDataSourceRuntime"
+    override val type: String = "AppDataSourceRuntime",
 ) : SourceRuntime {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -21,7 +21,7 @@ open class AppDataSourceRuntime(
             "enabled" to enabled,
             "notAccessibleReason" to notAccessibleReason,
             "status" to status,
-            "type" to type
+            "type" to type,
         )
     }
 }

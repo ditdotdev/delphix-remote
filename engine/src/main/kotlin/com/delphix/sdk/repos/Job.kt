@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * Represents a job object.
  */
 class Job(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/job"
 
@@ -32,7 +32,10 @@ class Job(
     /**
      * Update the specified Job object.
      */
-    fun update(ref: String, payload: com.delphix.sdk.objects.Job): JSONObject {
+    fun update(
+        ref: String,
+        payload: com.delphix.sdk.objects.Job,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 }

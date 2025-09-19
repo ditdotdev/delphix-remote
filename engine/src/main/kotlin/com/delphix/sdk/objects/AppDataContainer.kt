@@ -25,7 +25,7 @@ open class AppDataContainer(
     override val transformation: Boolean? = null, // True if this container is a transformation container.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "AppDataContainer"
+    override val type: String = "AppDataContainer",
 ) : DatabaseContainer {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -47,7 +47,7 @@ open class AppDataContainer(
             "name" to name,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }

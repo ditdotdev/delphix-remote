@@ -12,7 +12,7 @@ open class PreProvisioningRuntime(
     open val pendingAction: String? = null, // User action required to resolve any error that the pre-provisioning run encountered.
     open val preProvisioningState: String? = null, // Indicates the current state of pre-provisioning for the database.
     open val status: String? = null, // The status of the pre-provisioning run.
-    override val type: String = "PreProvisioningRuntime"
+    override val type: String = "PreProvisioningRuntime",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -21,7 +21,7 @@ open class PreProvisioningRuntime(
             "pendingAction" to pendingAction,
             "preProvisioningState" to preProvisioningState,
             "status" to status,
-            "type" to type
+            "type" to type,
         )
     }
 }

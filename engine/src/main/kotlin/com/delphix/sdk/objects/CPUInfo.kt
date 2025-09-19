@@ -9,13 +9,13 @@ package com.delphix.sdk.objects
 open class CPUInfo(
     open val cores: Int? = null, // Number of cores in the processor.
     open val speed: Int? = null, // Speed of the processor, in hertz.
-    override val type: String = "CPUInfo"
+    override val type: String = "CPUInfo",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "cores" to cores,
             "speed" to speed,
-            "type" to type
+            "type" to type,
         )
     }
 }

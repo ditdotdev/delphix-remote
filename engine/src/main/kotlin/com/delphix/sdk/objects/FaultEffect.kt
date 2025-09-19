@@ -20,7 +20,7 @@ open class FaultEffect(
     open val target: String? = null, // The user-visible Delphix object that has a fault effect.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "FaultEffect"
+    override val type: String = "FaultEffect",
 ) : PersistentObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -37,7 +37,7 @@ open class FaultEffect(
             "target" to target,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }

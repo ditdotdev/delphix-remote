@@ -10,5 +10,6 @@ interface FileProcessingResult : TypedObject {
     val url: String? // URL to download from or upload to.
     val token: String? // Token to pass as parameter to identify the file.
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

@@ -16,23 +16,24 @@ data class Repository(
     val provisioningEnabled: Boolean,
     val staging: Boolean,
     val toolkit: String = "",
-    val version: String
+    val version: String,
 ) {
     companion object {
         @JvmStatic
         fun fromJson(node: JSONObject): Repository {
-            val repository = Repository(
-                node.get("type").toString(),
-                node.get("reference").toString(),
-                node.get("name").toString(),
-                node.get("environment").toString(),
-                node.getBoolean("linkingEnabled"),
-                node.optString("parameters"),
-                node.getBoolean("provisioningEnabled"),
-                node.getBoolean("staging"),
-                node.optString("toolkit"),
-                node.get("version").toString()
-            )
+            val repository =
+                Repository(
+                    node.get("type").toString(),
+                    node.get("reference").toString(),
+                    node.get("name").toString(),
+                    node.get("environment").toString(),
+                    node.getBoolean("linkingEnabled"),
+                    node.optString("parameters"),
+                    node.getBoolean("provisioningEnabled"),
+                    node.getBoolean("staging"),
+                    node.optString("toolkit"),
+                    node.get("version").toString(),
+                )
             return repository
         }
     }

@@ -8,12 +8,12 @@ package com.delphix.sdk.objects
  */
 open class TimeflowPointSnapshot(
     open val snapshot: String? = null, // Reference to the snapshot.
-    override val type: String = "TimeflowPointSnapshot"
+    override val type: String = "TimeflowPointSnapshot",
 ) : TimeflowPointParameters {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "snapshot" to snapshot,
-            "type" to type
+            "type" to type,
         )
     }
 }

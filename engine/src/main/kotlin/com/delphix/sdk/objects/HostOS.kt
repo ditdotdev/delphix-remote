@@ -13,7 +13,7 @@ open class HostOS(
     open val name: String? = null, // The OS name.
     open val distribution: String? = null, // The OS distribution.
     open val version: String? = null, // The OS version.
-    override val type: String = "HostOS"
+    override val type: String = "HostOS",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -23,7 +23,7 @@ open class HostOS(
             "name" to name,
             "distribution" to distribution,
             "version" to version,
-            "type" to type
+            "type" to type,
         )
     }
 }

@@ -13,7 +13,7 @@ open class OperationTemplate(
     open val operation: SourceOperation? = null, // Template contents.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "OperationTemplate"
+    override val type: String = "OperationTemplate",
 ) : NamedUserObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -23,7 +23,7 @@ open class OperationTemplate(
             "operation" to operation,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }

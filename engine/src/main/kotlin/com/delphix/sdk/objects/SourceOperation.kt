@@ -8,5 +8,6 @@ package com.delphix.sdk.objects
  */
 interface SourceOperation : Operation {
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

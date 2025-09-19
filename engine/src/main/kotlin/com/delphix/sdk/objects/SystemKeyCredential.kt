@@ -7,11 +7,11 @@ package com.delphix.sdk.objects
  * The system public key based security credential.
  */
 open class SystemKeyCredential(
-    override val type: String = "SystemKeyCredential"
+    override val type: String = "SystemKeyCredential",
 ) : PublicKeyCredential {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
-            "type" to type
+            "type" to type,
         )
     }
 }

@@ -11,7 +11,7 @@ import org.json.JSONObject
  * A container holding data.
  */
 class Container(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/database"
 
@@ -32,28 +32,40 @@ class Container(
     /**
      * Update the specified Container object.
      */
-    fun update(ref: String, payload: com.delphix.sdk.objects.Container): JSONObject {
+    fun update(
+        ref: String,
+        payload: com.delphix.sdk.objects.Container,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 
     /**
      * Delete the specified Container object.
      */
-    fun delete(ref: String, payload: com.delphix.sdk.objects.DeleteParameters): JSONObject {
+    fun delete(
+        ref: String,
+        payload: com.delphix.sdk.objects.DeleteParameters,
+    ): JSONObject {
         return http.handlePost("$root/$ref/delete", payload.toMap())
     }
 
     /**
      * Provisions the container specified by the provision parameters.
      */
-    fun provision(ref: String, payload: com.delphix.sdk.objects.ProvisionParameters): JSONObject {
+    fun provision(
+        ref: String,
+        payload: com.delphix.sdk.objects.ProvisionParameters,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 
     /**
      * Performs SnapSync on a database.
      */
-    fun sync(ref: String, payload: com.delphix.sdk.objects.SyncParameters): JSONObject {
+    fun sync(
+        ref: String,
+        payload: com.delphix.sdk.objects.SyncParameters,
+    ): JSONObject {
         return http.handlePost("$root/$ref/sync", payload.toMap())
     }
 }

@@ -11,5 +11,6 @@ interface VirtualDatasetCreationParameters : TypedObject {
     val sourceConfig: SourceConfig? // The source config including dynamically discovered attributes of the source.
     val source: Source? // The source that describes an external dataset instance.
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

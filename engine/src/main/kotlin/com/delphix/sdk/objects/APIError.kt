@@ -12,7 +12,7 @@ open class APIError(
     open val details: Any? = null, // For validation errors, a map of fields to APIError objects. For all other errors, a string with further details of the error.
     open val id: String? = null, // A stable identifier for the class of error encountered.
     open val diagnoses: List<DiagnosisResult>, // Results of diagnostic checks run, if any, if the job failed.
-    override val type: String = "APIError"
+    override val type: String = "APIError",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -21,7 +21,7 @@ open class APIError(
             "details" to details,
             "id" to id,
             "diagnoses" to diagnoses,
-            "type" to type
+            "type" to type,
         )
     }
 }

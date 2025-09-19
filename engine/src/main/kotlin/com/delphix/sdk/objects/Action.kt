@@ -24,7 +24,7 @@ open class Action(
     open val failureDescription: String? = null, // Details of the action failure.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "Action"
+    override val type: String = "Action",
 ) : PersistentObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -45,7 +45,7 @@ open class Action(
             "failureDescription" to failureDescription,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }

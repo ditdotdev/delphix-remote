@@ -16,7 +16,7 @@ open class JobEvent(
     open val state: String? = null, // New state of the job.
     open val diagnoses: List<DiagnosisResult>, // Results of diagnostic checks run, if any, if the job failed.
     open val timestamp: String? = null, // Time the event occurred.
-    override val type: String = "JobEvent"
+    override val type: String = "JobEvent",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -29,7 +29,7 @@ open class JobEvent(
             "state" to state,
             "diagnoses" to diagnoses,
             "timestamp" to timestamp,
-            "type" to type
+            "type" to type,
         )
     }
 }

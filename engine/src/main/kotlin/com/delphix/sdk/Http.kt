@@ -4,8 +4,6 @@
 
 package com.delphix.sdk
 
-import java.io.IOException
-import java.util.concurrent.TimeUnit
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -13,6 +11,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
 import org.json.JSONObject
+import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class Http(
     val engineAddress: String,
@@ -21,13 +21,14 @@ class Http(
     private val versionMinor: Int = 7,
     private val versionMicro: Int = 0,
     private val timeout: Long = 60,
-    private val timeoutUnit: TimeUnit = TimeUnit.MINUTES
+    private val timeoutUnit: TimeUnit = TimeUnit.MINUTES,
 ) {
     private val sessionResource: String = "/resources/json/delphix/session"
-    private var JSESSIONID: String = ""
+    private var jsessionId: String = ""
 
     private fun call(request: Request): ResponseBody {
-        val caller = OkHttpClient.Builder()
+        val caller =
+            OkHttpClient.Builder()
                 .readTimeout(timeout, timeoutUnit)
                 .build()
         val response = caller.newCall(request).execute()
@@ -57,18 +58,20 @@ class Http(
         val cookieDough = r.header("Set-Cookie")
         if (!cookieDough.isNullOrEmpty()) {
             val cookies = cookieDough.split(";")
-            JSESSIONID = cookies[0].split("=")[1]
+            jsessionId = cookies[0].split("=")[1]
         }
     }
 
     fun setSession() {
         val json = "application/json; charset=utf-8".toMediaTypeOrNull()
         val requestBody = JSONObject(requestSessions()).toString().toRequestBody(json)
-        val request = Request.Builder()
+        val request =
+            Request.Builder()
                 .url("$engineAddress$sessionResource")
                 .post(requestBody)
                 .build()
-        val caller = OkHttpClient.Builder()
+        val caller =
+            OkHttpClient.Builder()
                 .readTimeout(timeout, timeoutUnit)
                 .build()
         val response = caller.newCall(request).execute()
@@ -77,22 +80,27 @@ class Http(
 
     fun handleGet(url: String): JSONObject {
         if (debug) println(url)
-        val request = Request.Builder()
+        val request =
+            Request.Builder()
                 .url("$engineAddress$url")
-                .addHeader("Cookie", "JSESSIONID=$JSESSIONID")
+                .addHeader("Cookie", "JSESSIONID=$jsessionId")
                 .build()
         val response = call(request).asJsonObject()
         validateResponse(response)
         return response
     }
 
-    fun handlePost(url: String, data: Map<String, Any?>): JSONObject {
+    fun handlePost(
+        url: String,
+        data: Map<String, Any?>,
+    ): JSONObject {
         if (debug) println(url)
         val json = "application/json; charset=utf-8".toMediaTypeOrNull()
         val requestBody = JSONObject(data).toString().toRequestBody(json)
-        val request = Request.Builder()
+        val request =
+            Request.Builder()
                 .url("$engineAddress$url")
-                .addHeader("Cookie", "JSESSIONID=$JSESSIONID")
+                .addHeader("Cookie", "JSESSIONID=$jsessionId")
                 .post(requestBody)
                 .build()
         val response = call(request).asJsonObject()
@@ -102,9 +110,10 @@ class Http(
 
     fun handleDelete(url: String): JSONObject {
         if (debug) println(url)
-        val request = Request.Builder()
+        val request =
+            Request.Builder()
                 .url("$engineAddress$url")
-                .addHeader("Cookie", "JSESSIONID=$JSESSIONID")
+                .addHeader("Cookie", "JSESSIONID=$jsessionId")
                 .delete()
                 .build()
         val response = call(request).asJsonObject()
@@ -116,6 +125,7 @@ class Http(
         fun ResponseBody.asString(): String {
             return this.string()
         }
+
         fun ResponseBody.asJsonObject(): JSONObject {
             return JSONObject(this.asString())
         }

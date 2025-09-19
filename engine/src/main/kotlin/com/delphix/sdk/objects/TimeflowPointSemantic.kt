@@ -9,13 +9,13 @@ package com.delphix.sdk.objects
 open class TimeflowPointSemantic(
     open val container: String? = null, // Reference to the container.
     open val location: String? = null, // A semantic description of a TimeFlow location.
-    override val type: String = "TimeflowPointSemantic"
+    override val type: String = "TimeflowPointSemantic",
 ) : TimeflowPointParameters {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "container" to container,
             "location" to location,
-            "type" to type
+            "type" to type,
         )
     }
 }

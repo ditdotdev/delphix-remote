@@ -8,5 +8,6 @@ package com.delphix.sdk.objects
  */
 interface TimeflowPointParameters : TypedObject {
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

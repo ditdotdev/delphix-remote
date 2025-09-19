@@ -9,5 +9,6 @@ package com.delphix.sdk.objects
 interface CallResult : TypedObject {
     val status: String? // Indicates whether an error occurred during the call.
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

@@ -8,12 +8,12 @@ package com.delphix.sdk.objects
  */
 open class TracerouteInfo(
     open val networkHops: String? = null, // Latency of network hops from host to Delphix Engine.
-    override val type: String = "TracerouteInfo"
+    override val type: String = "TracerouteInfo",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "networkHops" to networkHops,
-            "type" to type
+            "type" to type,
         )
     }
 }

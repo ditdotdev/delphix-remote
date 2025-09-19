@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * Database group.
  */
 class Group(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/group"
 
@@ -39,7 +39,10 @@ class Group(
     /**
      * Update the specified Group object.
      */
-    fun update(ref: String, payload: com.delphix.sdk.objects.Group): JSONObject {
+    fun update(
+        ref: String,
+        payload: com.delphix.sdk.objects.Group,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 

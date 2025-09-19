@@ -17,5 +17,6 @@ package com.delphix.sdk.objects
  */
 interface TypedObject {
     val type: String // "Object type."
+
     fun toMap(): Map<String, Any?>
 }

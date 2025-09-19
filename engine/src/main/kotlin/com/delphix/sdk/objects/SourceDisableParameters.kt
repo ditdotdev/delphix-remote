@@ -8,12 +8,12 @@ package com.delphix.sdk.objects
  */
 open class SourceDisableParameters(
     open val attemptCleanup: Boolean? = null, // Whether to attempt a cleanup of the database from the environment before the disable.
-    override val type: String = "SourceDisableParameters"
+    override val type: String = "SourceDisableParameters",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "attemptCleanup" to attemptCleanup,
-            "type" to type
+            "type" to type,
         )
     }
 }

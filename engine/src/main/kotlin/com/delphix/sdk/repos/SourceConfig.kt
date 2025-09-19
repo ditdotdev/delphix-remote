@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * The source config represents the dynamically discovered attributes of a source.
  */
 class SourceConfig(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/sourceconfig"
 
@@ -39,7 +39,10 @@ class SourceConfig(
     /**
      * Update the specified SourceConfig object.
      */
-    fun update(ref: String, payload: com.delphix.sdk.objects.SourceConfig): JSONObject {
+    fun update(
+        ref: String,
+        payload: com.delphix.sdk.objects.SourceConfig,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 

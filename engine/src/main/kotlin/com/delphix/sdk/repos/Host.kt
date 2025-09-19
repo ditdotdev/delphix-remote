@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * The representation of a host object.
  */
 class Host(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/host"
 
@@ -32,7 +32,10 @@ class Host(
     /**
      * Update the specified Host object.
      */
-    fun update(ref: String, payload: com.delphix.sdk.objects.Host): JSONObject {
+    fun update(
+        ref: String,
+        payload: com.delphix.sdk.objects.Host,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 }

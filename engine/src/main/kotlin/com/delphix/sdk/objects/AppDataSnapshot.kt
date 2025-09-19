@@ -23,7 +23,7 @@ open class AppDataSnapshot(
     override val name: String? = null, // Object name.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "AppDataSnapshot"
+    override val type: String = "AppDataSnapshot",
 ) : TimeflowSnapshot {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -43,7 +43,7 @@ open class AppDataSnapshot(
             "name" to name,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }

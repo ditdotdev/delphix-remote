@@ -15,22 +15,23 @@ data class Environment(
     val host: String,
     val logCollectionEnabled: Boolean,
     val primaryUser: String,
-    val reference: String
+    val reference: String,
 ) {
     companion object {
         @JvmStatic
         fun fromJson(node: JSONObject): Environment {
-            val environment = Environment(
-                node.optString("type"),
-                node.optString("name"),
-                node.optString("aseHostEnvironmentParameters"),
-                node.optString("description"),
-                node.optBoolean("enabled"),
-                node.optString("host"),
-                node.optBoolean("logCollectionEnabled"),
-                node.optString("primaryUser"),
-                node.optString("reference")
-            )
+            val environment =
+                Environment(
+                    node.optString("type"),
+                    node.optString("name"),
+                    node.optString("aseHostEnvironmentParameters"),
+                    node.optString("description"),
+                    node.optBoolean("enabled"),
+                    node.optString("host"),
+                    node.optBoolean("logCollectionEnabled"),
+                    node.optString("primaryUser"),
+                    node.optString("reference"),
+                )
             return environment
         }
     }

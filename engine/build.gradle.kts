@@ -9,7 +9,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    jcenter()
     maven("https://dl.bintray.com/kotlin/kotlinx")
 }
 
@@ -18,10 +17,18 @@ val jar by tasks.getting(Jar::class) {
 }
 
 dependencies {
-    compile(kotlin("stdlib"))
-    compile(kotlin("reflect"))
-    compile("org.json:json:20190722")
-    compile("com.squareup.okhttp3:okhttp:4.2.2")
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
+    implementation("org.json:json:20250517")
+    implementation("com.squareup.okhttp3:okhttp:5.1.0")
+}
+
+// Skip ktlint for generated SDK objects
+tasks.named("ktlint") {
+    enabled = false
+}
+tasks.named("ktlintFormat") {
+    enabled = false
 }
 
 // Maven publishing configuration

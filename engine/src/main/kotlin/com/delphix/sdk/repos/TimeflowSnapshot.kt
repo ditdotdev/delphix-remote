@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * Snapshot of a point within a TimeFlow that is used as the basis for provisioning.
  */
 class TimeflowSnapshot(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/snapshot"
 
@@ -32,7 +32,10 @@ class TimeflowSnapshot(
     /**
      * Update the specified TimeflowSnapshot object.
      */
-    fun update(ref: String, payload: com.delphix.sdk.objects.TimeflowSnapshot): JSONObject {
+    fun update(
+        ref: String,
+        payload: com.delphix.sdk.objects.TimeflowSnapshot,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 

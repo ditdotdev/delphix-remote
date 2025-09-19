@@ -11,7 +11,7 @@ open class OKResult(
     open val action: String? = null, // Reference to the action associated with the operation, if any.
     open val job: String? = null, // Reference to the job started by the operation, if any.
     override val status: String? = null, // Indicates whether an error occurred during the call.
-    override val type: String = "OKResult"
+    override val type: String = "OKResult",
 ) : CallResult {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -19,7 +19,7 @@ open class OKResult(
             "action" to action,
             "job" to job,
             "status" to status,
-            "type" to type
+            "type" to type,
         )
     }
 }

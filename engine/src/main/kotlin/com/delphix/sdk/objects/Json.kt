@@ -17,5 +17,6 @@ package com.delphix.sdk.objects
  */
 interface Json {
     val type: String // "Object type."
+
     fun toMap(): Map<String, Any?>
 }

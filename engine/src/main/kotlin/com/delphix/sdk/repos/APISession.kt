@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * Describes a Delphix web service session and is the result of an initial handshake.
  */
 class APISession(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/session"
 

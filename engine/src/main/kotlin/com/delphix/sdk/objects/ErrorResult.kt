@@ -9,13 +9,13 @@ package com.delphix.sdk.objects
 open class ErrorResult(
     open val error: APIError? = null, // Specifics of the error that occurred during API call execution.
     override val status: String? = null, // Indicates whether an error occurred during the call.
-    override val type: String = "ErrorResult"
+    override val type: String = "ErrorResult",
 ) : CallResult {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "error" to error,
             "status" to status,
-            "type" to type
+            "type" to type,
         )
     }
 }

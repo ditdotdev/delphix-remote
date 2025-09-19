@@ -9,5 +9,6 @@ package com.delphix.sdk.objects
 interface SourceEnvironmentCreateParameters : TypedObject {
     val primaryUser: EnvironmentUser? // The primary user associated with the environment.
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

@@ -12,7 +12,7 @@ open class HostConfiguration(
     open val discovered: Boolean? = null, // Indicates whether the host configuration properties were discovered.
     open val machine: HostMachine? = null, // The host machine information.
     open val operatingSystem: HostOS? = null, // The host operating system information.
-    override val type: String = "HostConfiguration"
+    override val type: String = "HostConfiguration",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -21,7 +21,7 @@ open class HostConfiguration(
             "discovered" to discovered,
             "machine" to machine,
             "operatingSystem" to operatingSystem,
-            "type" to type
+            "type" to type,
         )
     }
 }

@@ -25,7 +25,10 @@ class DelphixRemoteClient : RemoteClient {
         return "engine"
     }
 
-    override fun parseUri(uri: URI, additionalProperties: Map<String, String>): Map<String, Any> {
+    override fun parseUri(
+        uri: URI,
+        additionalProperties: Map<String, String>,
+    ): Map<String, Any> {
         val (username, password, host, port, path) = util.getConnectionInfo(uri)
 
         if (port != null) {
@@ -74,7 +77,8 @@ class DelphixRemoteClient : RemoteClient {
     override fun getParameters(remoteProperties: Map<String, Any>): Map<String, Any> {
         val result = mutableMapOf<String, String>()
         if (remoteProperties["password"] == null) {
-            val input = console?.readPassword("password: ")
+            val input =
+                console?.readPassword("password: ")
                     ?: throw IllegalArgumentException("password required but no console available")
             result["password"] = String(input)
         }

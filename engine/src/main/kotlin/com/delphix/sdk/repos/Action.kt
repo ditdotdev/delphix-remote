@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * Represents an action, a permanent record of activity on the server.
  */
 class Action(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/action"
 

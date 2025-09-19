@@ -8,12 +8,12 @@ package com.delphix.sdk.objects
  */
 open class PasswordCredential(
     open val password: String? = null, // The password.
-    override val type: String = "PasswordCredential"
+    override val type: String = "PasswordCredential",
 ) : Credential {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "password" to password,
-            "type" to type
+            "type" to type,
         )
     }
 }

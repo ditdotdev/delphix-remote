@@ -22,7 +22,7 @@ open class Fault(
     open val status: String? = null, // The status of the fault. This can be ACTIVE, RESOLVED or IGNORED.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "Fault"
+    override val type: String = "Fault",
 ) : PersistentObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -41,7 +41,7 @@ open class Fault(
             "status" to status,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }

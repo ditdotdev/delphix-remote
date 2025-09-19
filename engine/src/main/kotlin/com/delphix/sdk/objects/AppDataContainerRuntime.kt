@@ -9,13 +9,13 @@ package com.delphix.sdk.objects
 open class AppDataContainerRuntime(
     override val preProvisioningStatus: PreProvisioningRuntime? = null, // The pre-provisioning runtime for the container.
     override val logSyncActive: Boolean? = null, // True if the LogSync is enabled and running for this container.
-    override val type: String = "AppDataContainerRuntime"
+    override val type: String = "AppDataContainerRuntime",
 ) : DBContainerRuntime {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "preProvisioningStatus" to preProvisioningStatus,
             "logSyncActive" to logSyncActive,
-            "type" to type
+            "type" to type,
         )
     }
 }

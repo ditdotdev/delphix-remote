@@ -8,7 +8,7 @@ import com.delphix.sdk.Http as Http
 import com.delphix.sdk.objects.Repository as RepoObj
 
 class Repository(
-    var http: Http
+    var http: Http,
 ) {
     val resource: String = "/resources/json/delphix/repository"
 

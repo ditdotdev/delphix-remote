@@ -4,14 +4,14 @@
 
 package com.delphix.sdk.repos
 
-import com.delphix.sdk.Http as Http
 import org.json.JSONObject
+import com.delphix.sdk.Http as Http
 
 /**
  * The representation of an environment user object.
  */
 class EnvironmentUser(
-    var http: Http
+    var http: Http,
 ) {
     val root: String = "/resources/json/delphix/environment/user"
 
@@ -39,7 +39,10 @@ class EnvironmentUser(
     /**
      * Update the specified EnvironmentUser object.
      */
-    fun update(ref: String, payload: com.delphix.sdk.objects.EnvironmentUser): JSONObject {
+    fun update(
+        ref: String,
+        payload: com.delphix.sdk.objects.EnvironmentUser,
+    ): JSONObject {
         return http.handlePost("$root/$ref", payload.toMap())
     }
 

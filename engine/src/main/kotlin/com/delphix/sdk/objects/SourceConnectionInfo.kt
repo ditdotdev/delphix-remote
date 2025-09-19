@@ -9,5 +9,6 @@ package com.delphix.sdk.objects
 interface SourceConnectionInfo : TypedObject {
     val version: String? // The database version string.
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

@@ -13,5 +13,6 @@ interface SourceRuntime : TypedObject {
     val notAccessibleReason: String? // The reason why the source is not JDBC accessible.
     val status: String? // Status of the source. 'Unknown' if all attempts to connect to the source failed.
     override val type: String
+
     override fun toMap(): Map<String, Any?>
 }

@@ -20,7 +20,6 @@ import java.io.Console
 import java.net.URI
 
 class DelphixRemoteClientTest : StringSpec() {
-
     @MockK
     lateinit var console: Console
 
@@ -32,7 +31,10 @@ class DelphixRemoteClientTest : StringSpec() {
         return MockKAnnotations.init(this)
     }
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
+    override fun afterTest(
+        testCase: TestCase,
+        result: TestResult,
+    ) {
         clearAllMocks()
     }
 
@@ -92,29 +94,55 @@ class DelphixRemoteClientTest : StringSpec() {
         }
 
         "engine remote to URI succeeds" {
-            val (result, props) = client.toUri(mapOf("address" to "host", "username" to "user",
-                    "repository" to "foo"))
+            val (result, props) =
+                client.toUri(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "user",
+                        "repository" to "foo",
+                    ),
+                )
             result shouldBe "engine://user@host/foo"
             props.size shouldBe 0
         }
 
         "engine remote with password to URI succeeds" {
-            val (result, props) = client.toUri(mapOf("address" to "host", "username" to "user",
-                    "repository" to "foo", "password" to "pass"))
+            val (result, props) =
+                client.toUri(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "user",
+                        "repository" to "foo",
+                        "password" to "pass",
+                    ),
+                )
             result shouldBe "engine://user:pass@host/foo"
             props.size shouldBe 0
         }
 
         "get engine parameters succeeds" {
-            val result = client.getParameters(mapOf("address" to "host", "username" to "user",
-                    "repository" to "foo", "password" to "pass"))
+            val result =
+                client.getParameters(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "user",
+                        "repository" to "foo",
+                        "password" to "pass",
+                    ),
+                )
             result["password"] shouldBe null
         }
 
         "get engine parameters prompts for password" {
             every { console.readPassword(any()) } returns "pass".toCharArray()
-            val result = client.getParameters(mapOf("address" to "host", "username" to "user",
-                    "repository" to "foo"))
+            val result =
+                client.getParameters(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "user",
+                        "repository" to "foo",
+                    ),
+                )
             result["password"] shouldBe "pass"
         }
     }

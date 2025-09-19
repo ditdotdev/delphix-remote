@@ -14,7 +14,7 @@ open class VirtualSourceOperations(
     open val preRollback: List<SourceOperation>, // Operations to perform before rewinding a virtual source. These operations can backup any data or configuration from the running source prior to rewinding.
     open val configureClone: List<SourceOperation>, // Operations to perform when initially creating the virtual source and every time it is refreshed.
     open val postRefresh: List<SourceOperation>, // Operations to perform after refreshing a virtual source. These operations can be used to restore any data or configuration backed up in the preRefresh operations.
-    override val type: String = "VirtualSourceOperations"
+    override val type: String = "VirtualSourceOperations",
 ) : TypedObject {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -25,7 +25,7 @@ open class VirtualSourceOperations(
             "preRollback" to preRollback,
             "configureClone" to configureClone,
             "postRefresh" to postRefresh,
-            "type" to type
+            "type" to type,
         )
     }
 }

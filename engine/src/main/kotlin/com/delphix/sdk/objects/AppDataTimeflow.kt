@@ -14,7 +14,7 @@ open class AppDataTimeflow(
     override val name: String? = null, // Object name.
     override val reference: String? = null, // The object reference.
     override val namespace: String? = null, // Alternate namespace for this object, for replicated and restored objects.
-    override val type: String = "AppDataTimeflow"
+    override val type: String = "AppDataTimeflow",
 ) : AppDataBaseTimeflow {
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -25,7 +25,7 @@ open class AppDataTimeflow(
             "name" to name,
             "reference" to reference,
             "namespace" to namespace,
-            "type" to type
+            "type" to type,
         )
     }
 }
