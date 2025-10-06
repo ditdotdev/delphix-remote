@@ -28,7 +28,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.17")
     implementation(project(path = ":engine", configuration = "default"))
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-    testImplementation("io.mockk:mockk:1.14.5")
+    testImplementation("io.mockk:mockk:1.14.6")
 }
 
 // Jar configuration
