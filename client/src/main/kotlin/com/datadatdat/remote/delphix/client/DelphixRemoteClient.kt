@@ -1,11 +1,11 @@
 /*
- * Copyright The Titan Project Contributors.
+ * Copyright Datadatdat.
  */
 
-package io.titandata.remote.delphix.client
+package com.datadatdat.remote.delphix.client
 
-import io.titandata.remote.RemoteClient
-import io.titandata.remote.RemoteClientUtil
+import com.datadatdat.remote.RemoteClient
+import com.datadatdat.remote.RemoteClientUtil
 import java.net.URI
 
 /**

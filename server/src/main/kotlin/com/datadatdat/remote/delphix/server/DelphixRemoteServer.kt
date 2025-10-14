@@ -1,8 +1,8 @@
 /*
- * Copyright The Titan Project Contributors.
+ * Copyright Datadatdat.
  */
 
-package io.titandata.remote.delphix.server
+package com.datadatdat.remote.delphix.server
 
 import com.delphix.sdk.Delphix
 import com.delphix.sdk.Http
@@ -17,13 +17,13 @@ import com.delphix.sdk.objects.SourceDisableParameters
 import com.delphix.sdk.objects.TimeflowPointParameters
 import com.delphix.sdk.objects.TimeflowPointSemantic
 import com.delphix.sdk.objects.TimeflowPointSnapshot
-import io.titandata.remote.RemoteOperation
-import io.titandata.remote.RemoteOperationType
-import io.titandata.remote.RemoteProgress
-import io.titandata.remote.RemoteServerUtil
-import io.titandata.remote.rsync.RsyncExecutor
-import io.titandata.remote.rsync.RsyncRemote
-import io.titandata.shell.CommandExecutor
+import com.datadatdat.remote.RemoteOperation
+import com.datadatdat.remote.RemoteOperationType
+import com.datadatdat.remote.RemoteProgress
+import com.datadatdat.remote.RemoteServerUtil
+import com.datadatdat.remote.rsync.RsyncExecutor
+import com.datadatdat.remote.rsync.RsyncRemote
+import com.datadatdat.shell.CommandExecutor
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 
@@ -88,7 +88,7 @@ class DelphixRemoteServer : RsyncRemote() {
 
     private fun getRepository(engine: Delphix): Repository? {
         for (r in engine.repository().list()) {
-            if (r.name == "Titan") {
+            if (r.name == "Datadatdat") {
                 return r
             }
         }
@@ -174,24 +174,24 @@ class DelphixRemoteServer : RsyncRemote() {
 
         operation.updateProgress(RemoteProgress.START, "Creating remote repository", null)
 
-        val titanEnvironment = findByName(engine.sourceEnvironment().list(), "titan")
-                ?: throw IllegalStateException("engine not properly configured for titan")
-        val titanSource = findInGroup(engine, "master", "titan")
-                ?: throw IllegalStateException("engine not properly configured for titan")
+        val datadatdatEnvironment = findByName(engine.sourceEnvironment().list(), "datadatdat")
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+        val datadatdatSource = findInGroup(engine, "master", "datadatdat")
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
         val repositoryGroup = findByName(engine.group().list(), "repositories")
-                ?: throw IllegalStateException("engine not properly configured for titan")
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
         val sourceRepository = getRepository(engine)
-                ?: throw IllegalStateException("engine not properly configured for titan")
-        val titanUser = getEnvUser(engine, titanEnvironment)
-                ?: throw IllegalStateException("engine not properly configured for titan")
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+        val datadatdatUser = getEnvUser(engine, datadatdatEnvironment)
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
 
         val container = AppDataContainer(name = name, group = repositoryGroup.getString("reference"))
-        val timeflowPoint = TimeflowPointSemantic(container = titanSource.getString("reference"),
+        val timeflowPoint = TimeflowPointSemantic(container = datadatdatSource.getString("reference"),
                 location = "LATEST_SNAPSHOT")
         val source = AppDataVirtualSource(name = name, additionalMountPoints = ArrayList(),
                 parameters = mapOf("operationId" to name))
         val sourceConfig = AppDataDirectSourceConfig(repository = sourceRepository.reference,
-                environmentUser = titanUser.getString("reference"), name = name, linkingEnabled = false,
+                environmentUser = datadatdatUser.getString("reference"), name = name, linkingEnabled = false,
                 path = "")
         val provisionParams = AppDataProvisionParameters(container = container, timeflowPointParameters = timeflowPoint,
                 source = source, sourceConfig = sourceConfig)
@@ -216,20 +216,20 @@ class DelphixRemoteServer : RsyncRemote() {
 
     private fun buildContainer(engine: Delphix, operation: RemoteOperation): AppDataContainer {
         val operationsGroup = findByName(engine.group().list(), "operations")
-                ?: throw IllegalStateException("engine not properly configured for titan")
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
         return AppDataContainer(name = operation.operationId,
                 group = operationsGroup.getString("reference"))
     }
 
     private fun buildSourceConfig(engine: Delphix, operation: RemoteOperation): AppDataDirectSourceConfig {
         val sourceRepository = getRepository(engine)
-                ?: throw IllegalStateException("engine not properly configured for titan")
-        val titanEnvironment = findByName(engine.sourceEnvironment().list(), "titan")
-                ?: throw IllegalStateException("engine not properly configured for titan")
-        val titanUser = getEnvUser(engine, titanEnvironment)
-                ?: throw IllegalStateException("engine not properly configured for titan")
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+        val datadatdatEnvironment = findByName(engine.sourceEnvironment().list(), "datadatdat")
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+        val datadatdatUser = getEnvUser(engine, datadatdatEnvironment)
+                ?: throw IllegalStateException("engine not properly configured for datadatdat")
         return AppDataDirectSourceConfig(repository = sourceRepository.reference,
-                environmentUser = titanUser.getString("reference"), name = operation.operationId, linkingEnabled = false,
+                environmentUser = datadatdatUser.getString("reference"), name = operation.operationId, linkingEnabled = false,
                 path = "")
     }
 

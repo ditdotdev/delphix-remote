@@ -1,8 +1,8 @@
 /*
- * Copyright The Titan Project Contributors.
+ * Copyright Datadatdat.
  */
 
-package io.titandata.remote.delphix.client
+package com.datadatdat.remote.delphix.client
 
 import io.kotlintest.TestCase
 import io.kotlintest.TestCaseOrder
