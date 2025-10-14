@@ -1,5 +1,5 @@
 /*
- * Copyright The Titan Project Contributors.
+ * Copyright Datadatdat.
  */
 
 plugins {
@@ -40,7 +40,7 @@ val mavenBucket = when(project.hasProperty("mavenBucket")) {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "io.titandata"
+            groupId = "com.datadatdat"
             artifactId = "delphix-sdk"
 
             from(components["java"])
@@ -49,7 +49,7 @@ publishing {
 
     repositories {
         maven {
-            name = "titan"
+            name = "datadatdat"
             url = uri("s3://$mavenBucket")
             authentication {
                 create<AwsImAuthentication>("awsIm")
