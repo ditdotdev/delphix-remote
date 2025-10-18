@@ -12,7 +12,6 @@ import io.mockk.impl.annotations.SpyK
 import kotlin.IllegalArgumentException
 
 class DelphixRemoteServerTest : StringSpec() {
-
     @SpyK
     var client = DelphixRemoteServer()
 
@@ -31,8 +30,15 @@ class DelphixRemoteServerTest : StringSpec() {
         }
 
         "validate remote succeeds with all properties" {
-            val result = client.validateRemote(mapOf("address" to "host", "username" to "admin", "repository" to "repo",
-                    "password" to "password"))
+            val result =
+                client.validateRemote(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "admin",
+                        "repository" to "repo",
+                        "password" to "password",
+                    ),
+                )
             result["address"] shouldBe "host"
             result["username"] shouldBe "admin"
             result["repository"] shouldBe "repo"
