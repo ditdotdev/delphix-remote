@@ -47,9 +47,10 @@ class DelphixRemoteServer : RsyncRemote() {
         return remote
     }
 
-    override fun validateParameters(parameters: Map<String, Any>): Map<String, Any> {
-        util.validateFields(parameters, emptyList(), listOf("password"))
-        return parameters
+    override fun validateParameters(parameters: Map<String, Any>?): Map<String, Any> {
+        val params = parameters ?: emptyMap()
+        util.validateFields(params, emptyList(), listOf("password"))
+        return params
     }
 
     private fun connect(
