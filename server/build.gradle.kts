@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.datadatdat:remote-sdk:1.3.0")
+    implementation("com.datadatdat:remote-sdk:1.4.0")
     implementation("com.datadatdat:command-executor:1.3.0")
     implementation("com.google.code.gson:gson:2.13.2")
     implementation("org.slf4j:slf4j-api:2.0.17")
