@@ -20,7 +20,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
     implementation("org.json:json:20250517")
-    implementation("com.squareup.okhttp3:okhttp:5.3.1")
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
 }
 
 // Skip ktlint for generated SDK objects
