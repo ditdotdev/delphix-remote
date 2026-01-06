@@ -36,7 +36,7 @@ class Http(
             throw IOException("Unexpected Code: $response")
         }
         checkCookie(response)
-        return response.body!!
+        return response.body
     }
 
     private fun validateResponse(response: JSONObject) {
