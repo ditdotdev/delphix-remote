@@ -23,7 +23,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.datadatdat:remote-sdk:1.8.7")
     implementation("com.datadatdat:command-executor:1.8.7")
-    implementation("com.google.code.gson:gson:2.13.2")
+    implementation("com.google.code.gson:gson:2.14.0")
     implementation("org.slf4j:slf4j-api:2.0.17")
     implementation(project(path = ":engine", configuration = "default"))
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
