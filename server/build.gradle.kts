@@ -24,7 +24,7 @@ dependencies {
     implementation("com.datadatdat:remote-sdk:1.9.0")
     implementation("com.datadatdat:command-executor:1.9.0")
     implementation("com.google.code.gson:gson:2.14.0")
-    implementation("org.slf4j:slf4j-api:2.0.17")
+    implementation("org.slf4j:slf4j-api:2.0.18")
     implementation(project(path = ":engine", configuration = "default"))
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.14.9")
