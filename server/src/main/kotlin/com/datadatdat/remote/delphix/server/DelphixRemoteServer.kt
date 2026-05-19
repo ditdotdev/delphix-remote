@@ -267,9 +267,14 @@ class DelphixRemoteServer : RsyncRemote() {
             }
 
         log.info("disabling VDB on ${engine.http.engineAddress}")
+        val sourceToDisable =
+            createdSource
+                ?: throw IllegalStateException(
+                    "engine did not return a source for newly provisioned container '$containerRef'",
+                )
         val disableResponse =
             engine.source().disable(
-                createdSource!!.getString("reference"),
+                sourceToDisable.getString("reference"),
                 SourceDisableParameters(),
             )
         waitForJob(engine, disableResponse)
@@ -335,14 +340,19 @@ class DelphixRemoteServer : RsyncRemote() {
         }
     }
 
-    private fun buildSource(operation: RemoteOperation): AppDataVirtualSource {
+    internal fun buildSource(operation: RemoteOperation): AppDataVirtualSource {
         val parameters: MutableMap<String, Any> = HashMap()
         parameters["operationId"] = operation.operationId
         parameters["operationType"] = operation.type
         parameters["repository"] = operation.remote["repository"] as String
         if (operation.type == RemoteOperationType.PUSH) {
             parameters["hash"] = operation.commitId
-            parameters["metadata"] = operation.commit!!.toMutableMap()
+            val commit =
+                operation.commit
+                    ?: throw IllegalArgumentException(
+                        "PUSH operation '${operation.operationId}' is missing commit metadata",
+                    )
+            parameters["metadata"] = commit.toMutableMap()
         }
 
         return AppDataVirtualSource(
@@ -360,7 +370,10 @@ class DelphixRemoteServer : RsyncRemote() {
             findInResult(engine.source().list()) {
                 it.getString("container") == containerRef
             }
-        val config = engine.sourceConfig().read(source!!.getString("config")).getJSONObject("result")
+                ?: throw IllegalStateException(
+                    "no source found for container '$containerRef' on engine ${engine.http.engineAddress}",
+                )
+        val config = engine.sourceConfig().read(source.getString("config")).getJSONObject("result")
         val obj = config.getJSONObject("parameters")
         return obj
     }
@@ -428,9 +441,13 @@ class DelphixRemoteServer : RsyncRemote() {
                 findInResult(data.engine.source().list()) {
                     it.getString("container") == data.operationRef
                 }
+                    ?: throw IllegalStateException(
+                        "no source found for container '${data.operationRef}' on engine " +
+                            "${data.engine.http.engineAddress} while ending sync",
+                    )
             response =
                 data.engine.source().disable(
-                    source!!.getString("reference"),
+                    source.getString("reference"),
                     SourceDisableParameters(),
                 )
             waitForJob(data.engine, response)
