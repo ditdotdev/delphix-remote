@@ -4,6 +4,7 @@
 
 plugins {
     kotlin("jvm")
+    jacoco
     `maven-publish`
 }
 
@@ -21,18 +22,50 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation("org.json:json:20251224")
     implementation("com.squareup.okhttp3:okhttp:5.3.2")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+    testImplementation("io.mockk:mockk:1.14.9")
+    testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
 }
 
-// Skip ktlint for generated SDK objects
-tasks.named("ktlint") {
-    enabled = false
+// Only lint the files we author here. SDK objects/repos are generated.
+// The parent project already sets args; we override them with a narrower file list.
+tasks.named<JavaExec>("ktlint") {
+    setArgs(
+        listOf(
+            "src/main/kotlin/com/delphix/sdk/Http.kt",
+            "src/main/kotlin/com/delphix/sdk/DelphixApiError.kt",
+            "src/test/**/*.kt",
+        ),
+    )
 }
-tasks.named("ktlintFormat") {
-    enabled = false
+tasks.named<JavaExec>("ktlintFormat") {
+    setArgs(
+        listOf(
+            "-F",
+            "src/main/kotlin/com/delphix/sdk/Http.kt",
+            "src/main/kotlin/com/delphix/sdk/DelphixApiError.kt",
+            "src/test/**/*.kt",
+        ),
+    )
+}
+
+// Test configuration
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
 }
 
 // Maven publishing configuration
-val mavenBucket = when(project.hasProperty("mavenBucket")) {
+val mavenBucket = when (project.hasProperty("mavenBucket")) {
     true -> project.property("mavenBucket")
     false -> "datadatdat-maven"
 }
