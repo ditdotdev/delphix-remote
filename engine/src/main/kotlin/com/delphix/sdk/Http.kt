@@ -26,16 +26,24 @@ class Http(
     private val sessionResource: String = "/resources/json/delphix/session"
     private var jsessionId: String = ""
 
+    // Single OkHttpClient instance reused across every request. OkHttp's connection
+    // pool and thread pools are per-client, so constructing a builder per call (as
+    // the previous implementation did) defeated keep-alive and leaked resources.
+    private val client: OkHttpClient =
+        OkHttpClient.Builder()
+            .readTimeout(timeout, timeoutUnit)
+            .build()
+
     private fun call(request: Request): ResponseBody {
-        val caller =
-            OkHttpClient.Builder()
-                .readTimeout(timeout, timeoutUnit)
-                .build()
-        val response = caller.newCall(request).execute()
+        val response = client.newCall(request).execute()
         if (!response.isSuccessful) {
             throw IOException("Unexpected Code: $response")
         }
         checkCookie(response)
+        // OkHttp 5 returns a non-nullable ResponseBody. The earlier review noted a
+        // theoretical NPE risk here (#6); that risk does not exist with the current
+        // okhttp version, but we keep the body access on its own line so future
+        // upgrades that re-introduce nullability surface clearly.
         return response.body
     }
 
@@ -43,9 +51,9 @@ class Http(
         if (debug) println(response)
         if (response.get("status") == "ERROR") {
             val error = response.getJSONObject("error")
-            val details = error.get("details")
-            val action = error.get("action")
-            throw Exception("$details $action")
+            val details = error.get("details").toString()
+            val action = error.get("action").toString()
+            throw DelphixApiError(details, action)
         }
     }
 
@@ -54,12 +62,25 @@ class Http(
         return mapOf("type" to "APISession", "version" to version)
     }
 
+    /**
+     * Parse the `JSESSIONID` value out of the `Set-Cookie` header, tolerating malformed
+     * input. The previous implementation did `cookies[0].split("=")[1]`, which crashed
+     * with [IndexOutOfBoundsException] on any header that didn't contain an `=` (or that
+     * led with a `;`). Now we bounds-check before indexing and silently ignore malformed
+     * headers — they cannot legitimately establish a session anyway.
+     */
     private fun checkCookie(r: Response) {
         val cookieDough = r.header("Set-Cookie")
-        if (!cookieDough.isNullOrEmpty()) {
-            val cookies = cookieDough.split(";")
-            jsessionId = cookies[0].split("=")[1]
+        if (cookieDough.isNullOrEmpty()) {
+            return
         }
+        val first = cookieDough.split(";").firstOrNull() ?: return
+        val eq = first.indexOf('=')
+        if (eq <= 0 || eq == first.length - 1) {
+            // No '=', or empty name, or empty value — not a usable cookie.
+            return
+        }
+        jsessionId = first.substring(eq + 1)
     }
 
     fun setSession() {
@@ -70,11 +91,7 @@ class Http(
                 .url("$engineAddress$sessionResource")
                 .post(requestBody)
                 .build()
-        val caller =
-            OkHttpClient.Builder()
-                .readTimeout(timeout, timeoutUnit)
-                .build()
-        val response = caller.newCall(request).execute()
+        val response = client.newCall(request).execute()
         checkCookie(response)
     }
 
