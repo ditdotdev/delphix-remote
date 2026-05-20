@@ -67,6 +67,151 @@ class DelphixRemoteServerTest : StringSpec() {
             }
         }
 
+        // ---------------------------------------------------------------
+        // skipHostCheck / knownHostsFile (issue #51, mirrors ssh-remote #62)
+        // ---------------------------------------------------------------
+
+        "validate remote accepts skipHostCheck as Boolean true" {
+            val result =
+                client.validateRemote(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "admin",
+                        "repository" to "repo",
+                        "skipHostCheck" to true,
+                    ),
+                )
+            result["skipHostCheck"] shouldBe true
+        }
+
+        "validate remote accepts skipHostCheck as Boolean false" {
+            val result =
+                client.validateRemote(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "admin",
+                        "repository" to "repo",
+                        "skipHostCheck" to false,
+                    ),
+                )
+            result["skipHostCheck"] shouldBe false
+        }
+
+        "validate remote accepts skipHostCheck as String 'true'" {
+            val result =
+                client.validateRemote(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "admin",
+                        "repository" to "repo",
+                        "skipHostCheck" to "true",
+                    ),
+                )
+            result["skipHostCheck"] shouldBe true
+        }
+
+        "validate remote accepts skipHostCheck as String 'false'" {
+            val result =
+                client.validateRemote(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "admin",
+                        "repository" to "repo",
+                        "skipHostCheck" to "false",
+                    ),
+                )
+            result["skipHostCheck"] shouldBe false
+        }
+
+        "validate remote accepts skipHostCheck as String 'TRUE' case-insensitively" {
+            val result =
+                client.validateRemote(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "admin",
+                        "repository" to "repo",
+                        "skipHostCheck" to "TRUE",
+                    ),
+                )
+            result["skipHostCheck"] shouldBe true
+        }
+
+        "validate remote rejects skipHostCheck as integer 42" {
+            val ex =
+                shouldThrow<IllegalArgumentException> {
+                    client.validateRemote(
+                        mapOf(
+                            "address" to "host",
+                            "username" to "admin",
+                            "repository" to "repo",
+                            "skipHostCheck" to 42,
+                        ),
+                    )
+                }
+            ex.message!! shouldContain "skipHostCheck"
+        }
+
+        "validate remote rejects skipHostCheck as nonsense string" {
+            val ex =
+                shouldThrow<IllegalArgumentException> {
+                    client.validateRemote(
+                        mapOf(
+                            "address" to "host",
+                            "username" to "admin",
+                            "repository" to "repo",
+                            "skipHostCheck" to "yes",
+                        ),
+                    )
+                }
+            ex.message!! shouldContain "skipHostCheck"
+        }
+
+        "validate remote accepts knownHostsFile as String" {
+            val result =
+                client.validateRemote(
+                    mapOf(
+                        "address" to "host",
+                        "username" to "admin",
+                        "repository" to "repo",
+                        "knownHostsFile" to "/etc/datadatdat/known_hosts",
+                    ),
+                )
+            result["knownHostsFile"] shouldBe "/etc/datadatdat/known_hosts"
+        }
+
+        "coerceBoolean accepts Boolean true" {
+            DelphixRemoteServer.coerceBoolean("k", true) shouldBe true
+        }
+
+        "coerceBoolean accepts Boolean false" {
+            DelphixRemoteServer.coerceBoolean("k", false) shouldBe false
+        }
+
+        "coerceBoolean accepts String 'true'" {
+            DelphixRemoteServer.coerceBoolean("k", "true") shouldBe true
+        }
+
+        "coerceBoolean accepts String 'False'" {
+            DelphixRemoteServer.coerceBoolean("k", "False") shouldBe false
+        }
+
+        "coerceBoolean rejects nonsense String with property name in error" {
+            val ex =
+                shouldThrow<IllegalArgumentException> {
+                    DelphixRemoteServer.coerceBoolean("myProp", "maybe")
+                }
+            ex.message!! shouldContain "myProp"
+            ex.message!! shouldContain "maybe"
+        }
+
+        "coerceBoolean rejects non-Boolean non-String type with property name in error" {
+            val ex =
+                shouldThrow<IllegalArgumentException> {
+                    DelphixRemoteServer.coerceBoolean("myProp", 42)
+                }
+            ex.message!! shouldContain "myProp"
+        }
+
         "validate parameters succeeds with empty properties" {
             val result = client.validateParameters(emptyMap())
             result.size shouldBe 0

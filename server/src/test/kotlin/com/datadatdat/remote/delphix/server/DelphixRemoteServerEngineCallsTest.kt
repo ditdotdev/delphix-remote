@@ -399,6 +399,219 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
     }
 
     // ---------------------------------------------------------------
+    // getRsync host-key threading (issue #51): make sure skipHostCheck /
+    // knownHostsFile from the validated remote map flow into the
+    // RsyncExecutor so the SDK applies the right StrictHostKeyChecking
+    // policy on the rsync data path. Secure default; opt-out via Boolean
+    // or "true"/"false" string; custom known_hosts override.
+    // ---------------------------------------------------------------
+
+    "getRsync defaults to secure host-key checking when skipHostCheck unset" {
+        val server = DelphixRemoteServer()
+        val op =
+            newOperation(
+                RemoteOperationType.PUSH,
+                remoteOverride =
+                    mapOf(
+                        "address" to "engine.test",
+                        "username" to "admin",
+                        "password" to "pw",
+                        "repository" to "myrepo",
+                    ),
+            )
+        val data =
+            DelphixRemoteServer.EngineOperation(
+                engine = mockk(relaxed = true),
+                operationRef = "op-ref",
+                sshAddress = "10.0.0.1",
+                sshUser = "delphix",
+                sshKey = "the-key",
+            )
+        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        rsync.skipHostCheck shouldBe false
+        rsync.knownHostsFile shouldBe null
+
+        // And the SDK's buildSshCommand should pick up the SecureDefault path: yes + known_hosts.
+        val tmp = java.io.File.createTempFile("delphix-rsync-test", ".tmp")
+        tmp.deleteOnExit()
+        try {
+            val args = rsync.buildSshCommand(tmp, skipHostCheck = rsync.skipHostCheck, knownHostsFile = rsync.knownHostsFile)
+            args.contains("StrictHostKeyChecking=yes") shouldBe true
+            args.contains("StrictHostKeyChecking=no") shouldBe false
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    "getRsync threads skipHostCheck=false (Boolean) through to RsyncExecutor" {
+        // Cover the branch where skipHostCheck is non-null but evaluates to
+        // false — needed for full branch coverage on the `!= null && coerceBoolean(...)`
+        // expression in getRsync.
+        val server = DelphixRemoteServer()
+        val op =
+            newOperation(
+                RemoteOperationType.PUSH,
+                remoteOverride =
+                    mapOf(
+                        "address" to "engine.test",
+                        "username" to "admin",
+                        "password" to "pw",
+                        "repository" to "myrepo",
+                        "skipHostCheck" to false,
+                    ),
+            )
+        val data =
+            DelphixRemoteServer.EngineOperation(
+                engine = mockk(relaxed = true),
+                operationRef = "op-ref",
+                sshAddress = "10.0.0.1",
+                sshUser = "delphix",
+                sshKey = "the-key",
+            )
+        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        rsync.skipHostCheck shouldBe false
+    }
+
+    "getRsync threads skipHostCheck=true (Boolean) through to RsyncExecutor" {
+        val server = DelphixRemoteServer()
+        val op =
+            newOperation(
+                RemoteOperationType.PUSH,
+                remoteOverride =
+                    mapOf(
+                        "address" to "engine.test",
+                        "username" to "admin",
+                        "password" to "pw",
+                        "repository" to "myrepo",
+                        "skipHostCheck" to true,
+                    ),
+            )
+        val data =
+            DelphixRemoteServer.EngineOperation(
+                engine = mockk(relaxed = true),
+                operationRef = "op-ref",
+                sshAddress = "10.0.0.1",
+                sshUser = "delphix",
+                sshKey = "the-key",
+            )
+        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        rsync.skipHostCheck shouldBe true
+
+        val tmp = java.io.File.createTempFile("delphix-rsync-test", ".tmp")
+        tmp.deleteOnExit()
+        try {
+            val args = rsync.buildSshCommand(tmp, skipHostCheck = rsync.skipHostCheck, knownHostsFile = rsync.knownHostsFile)
+            args.contains("StrictHostKeyChecking=no") shouldBe true
+            args.contains("UserKnownHostsFile=/dev/null") shouldBe true
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    "getRsync threads skipHostCheck String 'true' through to RsyncExecutor" {
+        val server = DelphixRemoteServer()
+        val op =
+            newOperation(
+                RemoteOperationType.PUSH,
+                remoteOverride =
+                    mapOf(
+                        "address" to "engine.test",
+                        "username" to "admin",
+                        "password" to "pw",
+                        "repository" to "myrepo",
+                        "skipHostCheck" to "true",
+                    ),
+            )
+        val data =
+            DelphixRemoteServer.EngineOperation(
+                engine = mockk(relaxed = true),
+                operationRef = "op-ref",
+                sshAddress = "10.0.0.1",
+                sshUser = "delphix",
+                sshKey = "k",
+            )
+        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        rsync.skipHostCheck shouldBe true
+    }
+
+    "getRsync threads knownHostsFile through to RsyncExecutor" {
+        val server = DelphixRemoteServer()
+        val op =
+            newOperation(
+                RemoteOperationType.PUSH,
+                remoteOverride =
+                    mapOf(
+                        "address" to "engine.test",
+                        "username" to "admin",
+                        "password" to "pw",
+                        "repository" to "myrepo",
+                        "knownHostsFile" to "/etc/datadatdat/known_hosts",
+                    ),
+            )
+        val data =
+            DelphixRemoteServer.EngineOperation(
+                engine = mockk(relaxed = true),
+                operationRef = "op-ref",
+                sshAddress = "10.0.0.1",
+                sshUser = "delphix",
+                sshKey = "k",
+            )
+        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        rsync.skipHostCheck shouldBe false
+        rsync.knownHostsFile shouldBe "/etc/datadatdat/known_hosts"
+
+        val tmp = java.io.File.createTempFile("delphix-rsync-test", ".tmp")
+        tmp.deleteOnExit()
+        try {
+            val args = rsync.buildSshCommand(tmp, skipHostCheck = rsync.skipHostCheck, knownHostsFile = rsync.knownHostsFile)
+            args.contains("StrictHostKeyChecking=yes") shouldBe true
+            args.contains("UserKnownHostsFile=/etc/datadatdat/known_hosts") shouldBe true
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    "getRsync with skipHostCheck=true ignores knownHostsFile" {
+        val server = DelphixRemoteServer()
+        val op =
+            newOperation(
+                RemoteOperationType.PUSH,
+                remoteOverride =
+                    mapOf(
+                        "address" to "engine.test",
+                        "username" to "admin",
+                        "password" to "pw",
+                        "repository" to "myrepo",
+                        "skipHostCheck" to true,
+                        "knownHostsFile" to "/etc/datadatdat/known_hosts",
+                    ),
+            )
+        val data =
+            DelphixRemoteServer.EngineOperation(
+                engine = mockk(relaxed = true),
+                operationRef = "op-ref",
+                sshAddress = "10.0.0.1",
+                sshUser = "delphix",
+                sshKey = "k",
+            )
+        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        rsync.skipHostCheck shouldBe true
+        rsync.knownHostsFile shouldBe "/etc/datadatdat/known_hosts"
+
+        val tmp = java.io.File.createTempFile("delphix-rsync-test", ".tmp")
+        tmp.deleteOnExit()
+        try {
+            val args = rsync.buildSshCommand(tmp, skipHostCheck = rsync.skipHostCheck, knownHostsFile = rsync.knownHostsFile)
+            // skipHostCheck=true → no + /dev/null, regardless of knownHostsFile value.
+            args.contains("StrictHostKeyChecking=no") shouldBe true
+            args.contains("UserKnownHostsFile=/dev/null") shouldBe true
+            args.contains("UserKnownHostsFile=/etc/datadatdat/known_hosts") shouldBe false
+        } finally {
+            tmp.delete()
+        }
+    }
+
+    // ---------------------------------------------------------------
     // syncDataEnd happy paths (PUSH successful sync + disable; PULL deletes; PUSH unsuccessful deletes)
     // ---------------------------------------------------------------
 
