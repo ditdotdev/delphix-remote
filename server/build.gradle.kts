@@ -11,11 +11,6 @@ plugins {
 }
 
 repositories {
-    // mavenLocal() is required while remote-sdk 1.9.1 is in coordinated-PR
-    // limbo and not yet published to the datadatdat maven repo. Remove it
-    // once 1.9.1 is published. See the PR description for #51 and the SDK
-    // companion PR / issue.
-    mavenLocal()
     mavenCentral()
     maven("https://dl.bintray.com/kotlin/kotlinx")
     maven {
