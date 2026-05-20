@@ -36,15 +36,74 @@ class DelphixRemoteServer : RsyncRemote() {
 
     companion object {
         val log = LoggerFactory.getLogger(DelphixRemoteServer::class.java)
+
+        /**
+         * Coerce a JSON-deserialized value into a [Boolean]. `Map<String, Any>`
+         * payloads can carry either a real [Boolean] (most parsers) or the
+         * literal strings `"true"`/`"false"` (some serializers). Anything else
+         * is rejected so a typo like `"yes"` does not silently disable a
+         * security control. Mirrors `SshRemoteServer.coerceBoolean` from
+         * ssh-remote PR #62 to keep the validation surface consistent across
+         * the two providers.
+         */
+        internal fun coerceBoolean(
+            prop: String,
+            value: Any,
+        ): Boolean =
+            when (value) {
+                is Boolean -> {
+                    value
+                }
+
+                is String -> {
+                    when (value.lowercase()) {
+                        "true" -> {
+                            true
+                        }
+
+                        "false" -> {
+                            false
+                        }
+
+                        else -> {
+                            throw IllegalArgumentException(
+                                "'$prop' must be a boolean (true/false), got '$value'",
+                            )
+                        }
+                    }
+                }
+
+                else -> {
+                    throw IllegalArgumentException("'$prop' must be a boolean, got ${value::class.simpleName}")
+                }
+            }
     }
 
     override fun getProvider(): String {
         return "engine"
     }
 
+    /**
+     * Validate remote configuration. Required: (username, address, repository).
+     * Optional: (password, knownHostsFile, skipHostCheck).
+     *
+     * `skipHostCheck` and `knownHostsFile` mirror the ssh-remote properties
+     * introduced in ssh-remote PR #62 and govern host-key verification on the
+     * rsync data path (see remote-sdk PR #47). Defaults are secure:
+     * `StrictHostKeyChecking=yes` against `~/.ssh/known_hosts`.
+     */
     override fun validateRemote(remote: Map<String, Any>): Map<String, Any> {
-        util.validateFields(remote, listOf("username", "address", "repository"), listOf("password"))
-        return remote
+        util.validateFields(
+            remote,
+            listOf("username", "address", "repository"),
+            listOf("password", "knownHostsFile", "skipHostCheck"),
+        )
+        val validated = remote.toMutableMap()
+        val rawSkipHostCheck = remote["skipHostCheck"]
+        if (rawSkipHostCheck != null) {
+            validated["skipHostCheck"] = coerceBoolean("skipHostCheck", rawSkipHostCheck)
+        }
+        return validated
     }
 
     override fun validateParameters(parameters: Map<String, Any>?): Map<String, Any> {
@@ -475,6 +534,13 @@ class DelphixRemoteServer : RsyncRemote() {
         executor: CommandExecutor,
     ): RsyncExecutor {
         val data = operationData as EngineOperation
+        // Thread skipHostCheck / knownHostsFile from the validated remote map
+        // through to the SDK so the rsync data-path SSH invocation honors the
+        // operator's host-key policy (issue #51 / remote-sdk #46 / ssh-remote
+        // #62). validateRemote has already coerced skipHostCheck to a Boolean.
+        val rawSkipHostCheck = operation.remote["skipHostCheck"]
+        val skipHostCheck = rawSkipHostCheck != null && coerceBoolean("skipHostCheck", rawSkipHostCheck)
+        val knownHostsFile = operation.remote["knownHostsFile"]?.toString()
         return RsyncExecutor(
             operation.updateProgress,
             8022,
@@ -482,6 +548,8 @@ class DelphixRemoteServer : RsyncRemote() {
             data.sshKey,
             "$src/",
             "$dst/",
+            skipHostCheck = skipHostCheck,
+            knownHostsFile = knownHostsFile,
         )
     }
 

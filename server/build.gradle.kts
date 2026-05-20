@@ -11,6 +11,11 @@ plugins {
 }
 
 repositories {
+    // mavenLocal() is required while remote-sdk 1.9.1 is in coordinated-PR
+    // limbo and not yet published to the datadatdat maven repo. Remove it
+    // once 1.9.1 is published. See the PR description for #51 and the SDK
+    // companion PR / issue.
+    mavenLocal()
     mavenCentral()
     maven("https://dl.bintray.com/kotlin/kotlinx")
     maven {
@@ -21,7 +26,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.datadatdat:remote-sdk:1.9.0")
+    implementation("com.datadatdat:remote-sdk:1.9.1")
     implementation("com.datadatdat:command-executor:1.9.0")
     implementation("com.google.code.gson:gson:2.14.0")
     implementation("org.slf4j:slf4j-api:2.0.18")
