@@ -60,8 +60,20 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
         html.required.set(true)
-        csv.required.set(false)
+        csv.required.set(true)
     }
+    // Exclude SDK-generated code (com/delphix/sdk/objects/** and com/delphix/sdk/repos/**).
+    // Coverage targets are the hand-written engine sources only (Http, Delphix, DelphixApiError).
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) {
+                    exclude("com/delphix/sdk/objects/**")
+                    exclude("com/delphix/sdk/repos/**")
+                }
+            },
+        ),
+    )
 }
 
 // Maven publishing configuration
