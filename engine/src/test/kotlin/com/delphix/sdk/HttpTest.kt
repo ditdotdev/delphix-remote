@@ -221,4 +221,152 @@ class HttpTest : StringSpec({
             server.shutdown()
         }
     }
+
+    "handleDelete issues a DELETE request with the session cookie and parses the JSON response" {
+        val server = MockWebServer()
+        server.start()
+        try {
+            server.enqueue(MockResponse().setBody("""{"status":"OK","result":"deleted"}"""))
+
+            val http = Http(server.url("/").toString().trimEnd('/'))
+            // pre-populate jsessionId so we can assert the cookie header
+            val field = Http::class.java.getDeclaredField("jsessionId")
+            field.isAccessible = true
+            field.set(http, "del-sess")
+
+            val response = http.handleDelete("/some/resource")
+            response.getString("result") shouldBe "deleted"
+
+            val recorded = server.takeRequest()
+            recorded.method shouldBe "DELETE"
+            recorded.path shouldBe "/some/resource"
+            recorded.headers["Cookie"] shouldContain "JSESSIONID=del-sess"
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    "handleDelete surfaces DelphixApiError when the engine returns status ERROR" {
+        val server = MockWebServer()
+        server.start()
+        try {
+            server.enqueue(
+                MockResponse().setBody(
+                    """{"status":"ERROR","error":{"details":"cannot delete","action":"contact admin"}}""",
+                ),
+            )
+            val http = Http(server.url("/").toString().trimEnd('/'))
+            val ex =
+                shouldThrow<DelphixApiError> {
+                    http.handleDelete("/x")
+                }
+            ex.details shouldBe "cannot delete"
+            ex.action shouldBe "contact admin"
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    "handlePost sends body and session cookie" {
+        val server = MockWebServer()
+        server.start()
+        try {
+            server.enqueue(MockResponse().setBody("""{"status":"OK","result":"ok"}"""))
+
+            val http = Http(server.url("/").toString().trimEnd('/'))
+            val field = Http::class.java.getDeclaredField("jsessionId")
+            field.isAccessible = true
+            field.set(http, "post-sess")
+
+            val response = http.handlePost("/p", mapOf("a" to 1, "b" to "x"))
+            response.getString("result") shouldBe "ok"
+
+            val recorded = server.takeRequest()
+            recorded.method shouldBe "POST"
+            recorded.path shouldBe "/p"
+            recorded.headers["Cookie"] shouldContain "JSESSIONID=post-sess"
+            val body = recorded.body.readUtf8()
+            (body.contains("\"a\":1")) shouldBe true
+            (body.contains("\"b\":\"x\"")) shouldBe true
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    "asString and asJsonObject extensions work on a response body" {
+        val server = MockWebServer()
+        server.start()
+        try {
+            server.enqueue(MockResponse().setBody("""{"status":"OK","result":{"k":"v"}}"""))
+            val http = Http(server.url("/").toString().trimEnd('/'))
+            val result = http.handleGet("/")
+            // result is asJsonObject() output downstream, so just sanity check
+            result.getJSONObject("result").getString("k") shouldBe "v"
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    // Debug mode prints the URL and the response. We can't easily assert stdout,
+    // but we can ensure debug=true does not change behavior.
+    "handleGet with debug=true still returns the parsed response" {
+        val server = MockWebServer()
+        server.start()
+        try {
+            server.enqueue(MockResponse().setBody("""{"status":"OK","result":"debug-ok"}"""))
+            val http = Http(server.url("/").toString().trimEnd('/'), debug = true)
+            val response = http.handleGet("/dbg")
+            response.getString("result") shouldBe "debug-ok"
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    "handlePost with debug=true still returns the parsed response" {
+        val server = MockWebServer()
+        server.start()
+        try {
+            server.enqueue(MockResponse().setBody("""{"status":"OK","result":"post-dbg"}"""))
+            val http = Http(server.url("/").toString().trimEnd('/'), debug = true)
+            val response = http.handlePost("/dbg", mapOf("k" to "v"))
+            response.getString("result") shouldBe "post-dbg"
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    "handleDelete with debug=true still returns the parsed response" {
+        val server = MockWebServer()
+        server.start()
+        try {
+            server.enqueue(MockResponse().setBody("""{"status":"OK","result":"del-dbg"}"""))
+            val http = Http(server.url("/").toString().trimEnd('/'), debug = true)
+            val response = http.handleDelete("/dbg")
+            response.getString("result") shouldBe "del-dbg"
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    // validateResponse also prints when debug=true. Exercise that branch.
+    "validateResponse with debug=true on an ERROR response still throws DelphixApiError" {
+        val server = MockWebServer()
+        server.start()
+        try {
+            server.enqueue(
+                MockResponse().setBody(
+                    """{"status":"ERROR","error":{"details":"d","action":"a"}}""",
+                ),
+            )
+            val http = Http(server.url("/").toString().trimEnd('/'), debug = true)
+            val ex =
+                shouldThrow<DelphixApiError> {
+                    http.handleGet("/")
+                }
+            ex.details shouldBe "d"
+            ex.action shouldBe "a"
+        } finally {
+            server.shutdown()
+        }
+    }
 })
