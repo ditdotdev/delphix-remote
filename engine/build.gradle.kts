@@ -20,7 +20,7 @@ val jar by tasks.getting(Jar::class) {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
-    implementation("org.json:json:20251224")
+    implementation("org.json:json:20260522")
     implementation("com.squareup.okhttp3:okhttp:5.3.2")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.14.9")
