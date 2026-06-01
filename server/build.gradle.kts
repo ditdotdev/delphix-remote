@@ -27,7 +27,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.18")
     implementation(project(path = ":engine", configuration = "default"))
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-    testImplementation("io.mockk:mockk:1.14.9")
+    testImplementation("io.mockk:mockk:1.14.11")
     testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
 }
 
