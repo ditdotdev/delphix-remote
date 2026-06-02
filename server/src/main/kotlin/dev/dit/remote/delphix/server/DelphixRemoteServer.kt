@@ -1,16 +1,9 @@
 /*
- * Copyright Datadatdat.
+ * Copyright Dit.
  */
 
-package com.datadatdat.remote.delphix.server
+package dev.dit.remote.delphix.server
 
-import com.datadatdat.remote.RemoteOperation
-import com.datadatdat.remote.RemoteOperationType
-import com.datadatdat.remote.RemoteProgress
-import com.datadatdat.remote.RemoteServerUtil
-import com.datadatdat.remote.rsync.RsyncExecutor
-import com.datadatdat.remote.rsync.RsyncRemote
-import com.datadatdat.shell.CommandExecutor
 import com.delphix.sdk.Delphix
 import com.delphix.sdk.Http
 import com.delphix.sdk.objects.AppDataContainer
@@ -24,6 +17,13 @@ import com.delphix.sdk.objects.SourceDisableParameters
 import com.delphix.sdk.objects.TimeflowPointParameters
 import com.delphix.sdk.objects.TimeflowPointSemantic
 import com.delphix.sdk.objects.TimeflowPointSnapshot
+import dev.dit.remote.RemoteOperation
+import dev.dit.remote.RemoteOperationType
+import dev.dit.remote.RemoteProgress
+import dev.dit.remote.RemoteServerUtil
+import dev.dit.remote.rsync.RsyncExecutor
+import dev.dit.remote.rsync.RsyncRemote
+import dev.dit.shell.CommandExecutor
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
 
@@ -160,7 +160,7 @@ class DelphixRemoteServer : RsyncRemote() {
 
     private fun getRepository(engine: Delphix): Repository? {
         for (r in engine.repository().list()) {
-            if (r.name == "Datadatdat") {
+            if (r.name == "Dit") {
                 return r
             }
         }
@@ -270,26 +270,26 @@ class DelphixRemoteServer : RsyncRemote() {
 
         operation.updateProgress(RemoteProgress.START, "Creating remote repository", null)
 
-        val datadatdatEnvironment =
-            findByName(engine.sourceEnvironment().list(), "datadatdat")
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
-        val datadatdatSource =
-            findInGroup(engine, "master", "datadatdat")
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+        val ditEnvironment =
+            findByName(engine.sourceEnvironment().list(), "dit")
+                ?: throw IllegalStateException("engine not properly configured for dit")
+        val ditSource =
+            findInGroup(engine, "master", "dit")
+                ?: throw IllegalStateException("engine not properly configured for dit")
         val repositoryGroup =
             findByName(engine.group().list(), "repositories")
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+                ?: throw IllegalStateException("engine not properly configured for dit")
         val sourceRepository =
             getRepository(engine)
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
-        val datadatdatUser =
-            getEnvUser(engine, datadatdatEnvironment)
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+                ?: throw IllegalStateException("engine not properly configured for dit")
+        val ditUser =
+            getEnvUser(engine, ditEnvironment)
+                ?: throw IllegalStateException("engine not properly configured for dit")
 
         val container = AppDataContainer(name = name, group = repositoryGroup.getString("reference"))
         val timeflowPoint =
             TimeflowPointSemantic(
-                container = datadatdatSource.getString("reference"),
+                container = ditSource.getString("reference"),
                 location = "LATEST_SNAPSHOT",
             )
         val source =
@@ -301,7 +301,7 @@ class DelphixRemoteServer : RsyncRemote() {
         val sourceConfig =
             AppDataDirectSourceConfig(
                 repository = sourceRepository.reference,
-                environmentUser = datadatdatUser.getString("reference"),
+                environmentUser = ditUser.getString("reference"),
                 name = name,
                 linkingEnabled = false,
                 path = "",
@@ -347,7 +347,7 @@ class DelphixRemoteServer : RsyncRemote() {
     ): AppDataContainer {
         val operationsGroup =
             findByName(engine.group().list(), "operations")
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+                ?: throw IllegalStateException("engine not properly configured for dit")
         return AppDataContainer(
             name = operation.operationId,
             group = operationsGroup.getString("reference"),
@@ -360,16 +360,16 @@ class DelphixRemoteServer : RsyncRemote() {
     ): AppDataDirectSourceConfig {
         val sourceRepository =
             getRepository(engine)
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
-        val datadatdatEnvironment =
-            findByName(engine.sourceEnvironment().list(), "datadatdat")
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
-        val datadatdatUser =
-            getEnvUser(engine, datadatdatEnvironment)
-                ?: throw IllegalStateException("engine not properly configured for datadatdat")
+                ?: throw IllegalStateException("engine not properly configured for dit")
+        val ditEnvironment =
+            findByName(engine.sourceEnvironment().list(), "dit")
+                ?: throw IllegalStateException("engine not properly configured for dit")
+        val ditUser =
+            getEnvUser(engine, ditEnvironment)
+                ?: throw IllegalStateException("engine not properly configured for dit")
         return AppDataDirectSourceConfig(
             repository = sourceRepository.reference,
-            environmentUser = datadatdatUser.getString("reference"),
+            environmentUser = ditUser.getString("reference"),
             name = operation.operationId,
             linkingEnabled = false,
             path = "",
