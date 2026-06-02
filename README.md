@@ -1,4 +1,4 @@
-# Datadatdat Delphix Remote Provider
+# Dit Delphix Remote Provider
 
 This is a proof of concept remote provider for storing remote repositories on engines. It makes use of
 a Delphix plugin that is not generally available and is therefore not yet usable by the general public.
@@ -20,7 +20,7 @@ The Delphix provider accepts the following remote properties:
 
 The Delphix provider uses rsync over SSH (via `remote-sdk`'s `RsyncExecutor`)
 to push/pull data to/from a short-lived VDB on the engine. Starting in the
-version that resolves [#51](https://github.com/datadatdat/delphix-remote/issues/51),
+version that resolves [#51](https://github.com/ditdotdev/delphix-remote/issues/51),
 that rsync invocation verifies the engine's host key by default
 (`StrictHostKeyChecking=yes`) against `~/.ssh/known_hosts` (or
 `knownHostsFile` if set).
@@ -38,7 +38,7 @@ ssh-keygen -lf ~/.ssh/known_hosts | grep engine.example.com
 To override the file location for a single remote:
 
 ```yaml
-knownHostsFile: /etc/datadatdat/known_hosts
+knownHostsFile: /etc/ditdotdev/known_hosts
 ```
 
 #### Behavior matrix
@@ -46,7 +46,7 @@ knownHostsFile: /etc/datadatdat/known_hosts
 | `skipHostCheck`                      | `knownHostsFile`               | `ssh -o StrictHostKeyChecking` | `-o UserKnownHostsFile`           |
 |--------------------------------------|--------------------------------|--------------------------------|-----------------------------------|
 | unset / `false`                      | unset                          | `yes`                          | `~/.ssh/known_hosts`              |
-| unset / `false`                      | `/etc/datadatdat/known_hosts`  | `yes`                          | `/etc/datadatdat/known_hosts`     |
+| unset / `false`                      | `/etc/ditdotdev/known_hosts`  | `yes`                          | `/etc/ditdotdev/known_hosts`     |
 | `true`                               | (ignored)                      | `no`                           | `/dev/null`                       |
 
 ### Opting out (`skipHostCheck`)
@@ -96,13 +96,13 @@ catch any future change.
 
 ## Contributing
 
-This project follows the Datadatdat community best practices:
+This project follows the Dit community best practices:
 
-  * [Contributing](https://github.com/datadatdat/.github/blob/master/CONTRIBUTING.md)
-  * [Code of Conduct](https://github.com/datadatdat/.github/blob/master/CODE_OF_CONDUCT.md)
-  * [Community Support](https://github.com/datadatdat/.github/blob/master/SUPPORT.md)
+  * [Contributing](https://github.com/ditdotdev/.github/blob/master/CONTRIBUTING.md)
+  * [Code of Conduct](https://github.com/ditdotdev/.github/blob/master/CODE_OF_CONDUCT.md)
+  * [Community Support](https://github.com/ditdotdev/.github/blob/master/SUPPORT.md)
 
-It is maintained by the [Datadatdat community maintainers](https://github.com/datadatdat/.github/blob/master/MAINTAINERS.md)
+It is maintained by the [Dit community maintainers](https://github.com/ditdotdev/.github/blob/master/MAINTAINERS.md)
 
 For more information on how it works, and how to build and release new versions,
 see the [Development Guidelines](DEVELOPING.md).

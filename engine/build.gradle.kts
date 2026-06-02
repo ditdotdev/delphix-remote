@@ -1,5 +1,5 @@
 /*
- * Copyright Datadatdat.
+ * Copyright Dit.
  */
 
 plugins {
@@ -67,13 +67,13 @@ tasks.jacocoTestReport {
 // Maven publishing configuration
 val mavenBucket = when (project.hasProperty("mavenBucket")) {
     true -> project.property("mavenBucket")
-    false -> "datadatdat-maven"
+    false -> "dit-maven"
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.datadatdat"
+            groupId = "dev.dit"
             artifactId = "delphix-sdk"
 
             from(components["java"])
@@ -82,7 +82,7 @@ publishing {
 
     repositories {
         maven {
-            name = "datadatdat"
+            name = "dit"
             url = uri("s3://$mavenBucket")
             authentication {
                 create<AwsImAuthentication>("awsIm")

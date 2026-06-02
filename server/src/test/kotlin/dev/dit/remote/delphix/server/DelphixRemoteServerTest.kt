@@ -1,15 +1,15 @@
 /*
- * Copyright Datadatdat.
+ * Copyright Dit.
  */
 
-package com.datadatdat.remote.delphix.server
+package dev.dit.remote.delphix.server
 
-import com.datadatdat.remote.RemoteOperation
-import com.datadatdat.remote.RemoteOperationType
 import com.delphix.sdk.Delphix
 import com.delphix.sdk.Http
 import com.delphix.sdk.repos.Source
 import com.delphix.sdk.repos.SourceConfig
+import dev.dit.remote.RemoteOperation
+import dev.dit.remote.RemoteOperationType
 import io.kotlintest.TestCaseOrder
 import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.shouldBe
@@ -173,10 +173,10 @@ class DelphixRemoteServerTest : StringSpec() {
                         "address" to "host",
                         "username" to "admin",
                         "repository" to "repo",
-                        "knownHostsFile" to "/etc/datadatdat/known_hosts",
+                        "knownHostsFile" to "/etc/ditdotdev/known_hosts",
                     ),
                 )
-            result["knownHostsFile"] shouldBe "/etc/datadatdat/known_hosts"
+            result["knownHostsFile"] shouldBe "/etc/ditdotdev/known_hosts"
         }
 
         "coerceBoolean accepts Boolean true" {
