@@ -1,11 +1,9 @@
 /*
- * Copyright Datadatdat.
+ * Copyright Dit.
  */
 
-package com.datadatdat.remote.delphix.server
+package dev.dit.remote.delphix.server
 
-import com.datadatdat.remote.RemoteOperation
-import com.datadatdat.remote.RemoteOperationType
 import com.delphix.sdk.Delphix
 import com.delphix.sdk.Http
 import com.delphix.sdk.objects.AppDataProvisionParameters
@@ -22,6 +20,8 @@ import com.delphix.sdk.repos.Source
 import com.delphix.sdk.repos.SourceConfig
 import com.delphix.sdk.repos.SourceEnvironment
 import com.delphix.sdk.repos.TimeflowSnapshot
+import dev.dit.remote.RemoteOperation
+import dev.dit.remote.RemoteOperationType
 import io.kotlintest.matchers.collections.shouldContain
 import io.kotlintest.matchers.string.shouldContain
 import io.kotlintest.shouldBe
@@ -99,7 +99,7 @@ private class FakeEngine {
         every { envUserRepo.list() } returns JSONObject("""{"result":[$arr]}""")
     }
 
-    /** Stub repository.list() with at least one repo so getRepository can find "Datadatdat". */
+    /** Stub repository.list() with at least one repo so getRepository can find "Dit". */
     fun stubRepositories(vararg names: String) {
         val repos =
             names.map { n ->
@@ -390,7 +390,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                 sshUser = "delphix",
                 sshKey = "the-key",
             )
-        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        val rsync = server.getRsync(op, data, "/src", "/dst", dev.dit.shell.CommandExecutor())
         rsync.port shouldBe 8022
         rsync.password shouldBe null
         rsync.key shouldBe "the-key"
@@ -427,7 +427,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                 sshUser = "delphix",
                 sshKey = "the-key",
             )
-        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        val rsync = server.getRsync(op, data, "/src", "/dst", dev.dit.shell.CommandExecutor())
         rsync.skipHostCheck shouldBe false
         rsync.knownHostsFile shouldBe null
 
@@ -468,7 +468,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                 sshUser = "delphix",
                 sshKey = "the-key",
             )
-        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        val rsync = server.getRsync(op, data, "/src", "/dst", dev.dit.shell.CommandExecutor())
         rsync.skipHostCheck shouldBe false
     }
 
@@ -494,7 +494,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                 sshUser = "delphix",
                 sshKey = "the-key",
             )
-        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        val rsync = server.getRsync(op, data, "/src", "/dst", dev.dit.shell.CommandExecutor())
         rsync.skipHostCheck shouldBe true
 
         val tmp = java.io.File.createTempFile("delphix-rsync-test", ".tmp")
@@ -530,7 +530,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                 sshUser = "delphix",
                 sshKey = "k",
             )
-        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        val rsync = server.getRsync(op, data, "/src", "/dst", dev.dit.shell.CommandExecutor())
         rsync.skipHostCheck shouldBe true
     }
 
@@ -545,7 +545,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                         "username" to "admin",
                         "password" to "pw",
                         "repository" to "myrepo",
-                        "knownHostsFile" to "/etc/datadatdat/known_hosts",
+                        "knownHostsFile" to "/etc/ditdotdev/known_hosts",
                     ),
             )
         val data =
@@ -556,16 +556,16 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                 sshUser = "delphix",
                 sshKey = "k",
             )
-        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        val rsync = server.getRsync(op, data, "/src", "/dst", dev.dit.shell.CommandExecutor())
         rsync.skipHostCheck shouldBe false
-        rsync.knownHostsFile shouldBe "/etc/datadatdat/known_hosts"
+        rsync.knownHostsFile shouldBe "/etc/ditdotdev/known_hosts"
 
         val tmp = java.io.File.createTempFile("delphix-rsync-test", ".tmp")
         tmp.deleteOnExit()
         try {
             val args = rsync.buildSshCommand(tmp, skipHostCheck = rsync.skipHostCheck, knownHostsFile = rsync.knownHostsFile)
             args.contains("StrictHostKeyChecking=yes") shouldBe true
-            args.contains("UserKnownHostsFile=/etc/datadatdat/known_hosts") shouldBe true
+            args.contains("UserKnownHostsFile=/etc/ditdotdev/known_hosts") shouldBe true
         } finally {
             tmp.delete()
         }
@@ -583,7 +583,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                         "password" to "pw",
                         "repository" to "myrepo",
                         "skipHostCheck" to true,
-                        "knownHostsFile" to "/etc/datadatdat/known_hosts",
+                        "knownHostsFile" to "/etc/ditdotdev/known_hosts",
                     ),
             )
         val data =
@@ -594,9 +594,9 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                 sshUser = "delphix",
                 sshKey = "k",
             )
-        val rsync = server.getRsync(op, data, "/src", "/dst", com.datadatdat.shell.CommandExecutor())
+        val rsync = server.getRsync(op, data, "/src", "/dst", dev.dit.shell.CommandExecutor())
         rsync.skipHostCheck shouldBe true
-        rsync.knownHostsFile shouldBe "/etc/datadatdat/known_hosts"
+        rsync.knownHostsFile shouldBe "/etc/ditdotdev/known_hosts"
 
         val tmp = java.io.File.createTempFile("delphix-rsync-test", ".tmp")
         tmp.deleteOnExit()
@@ -605,7 +605,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
             // skipHostCheck=true → no + /dev/null, regardless of knownHostsFile value.
             args.contains("StrictHostKeyChecking=no") shouldBe true
             args.contains("UserKnownHostsFile=/dev/null") shouldBe true
-            args.contains("UserKnownHostsFile=/etc/datadatdat/known_hosts") shouldBe false
+            args.contains("UserKnownHostsFile=/etc/ditdotdev/known_hosts") shouldBe false
         } finally {
             tmp.delete()
         }
@@ -695,7 +695,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
     // createRepo — error paths for each missing piece, then full success
     // ---------------------------------------------------------------
 
-    "createRepo throws when 'datadatdat' environment is missing" {
+    "createRepo throws when 'dit' environment is missing" {
         val server = DelphixRemoteServer()
         val f = FakeEngine()
         f.stubEnvironments() // no env
@@ -705,13 +705,13 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
             shouldThrow<IllegalStateException> {
                 server.createRepo(f.engine, op)
             }
-        ex.message!! shouldContain "datadatdat"
+        ex.message!! shouldContain "dit"
     }
 
     "createRepo throws when 'master' group is missing" {
         val server = DelphixRemoteServer()
         val f = FakeEngine()
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubGroups() // no groups
         val op = newOperation(RemoteOperationType.PUSH)
 
@@ -720,10 +720,10 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         }
     }
 
-    "createRepo throws when 'master/datadatdat' source is missing" {
+    "createRepo throws when 'master/dit' source is missing" {
         val server = DelphixRemoteServer()
         val f = FakeEngine()
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubGroups("master" to "GROUP-MASTER")
         // master group exists, but no container in it
         f.stubContainers("[]")
@@ -737,9 +737,9 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
     "createRepo throws when the 'repositories' group is missing" {
         val server = DelphixRemoteServer()
         val f = FakeEngine()
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubGroups("master" to "GROUP-MASTER")
-        f.stubContainers("""[{"name":"datadatdat","group":"GROUP-MASTER"}]""")
+        f.stubContainers("""[{"name":"dit","group":"GROUP-MASTER"}]""")
         // repositories group not in groups list — already stubbed only "master"
         val op = newOperation(RemoteOperationType.PUSH)
 
@@ -748,13 +748,13 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         }
     }
 
-    "createRepo throws when no 'Datadatdat' repository is registered" {
+    "createRepo throws when no 'Dit' repository is registered" {
         val server = DelphixRemoteServer()
         val f = FakeEngine()
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubGroups("master" to "GROUP-MASTER", "repositories" to "GROUP-REPOS")
-        f.stubContainers("""[{"name":"datadatdat","group":"GROUP-MASTER"}]""")
-        f.stubRepositories("NotDatadatdat")
+        f.stubContainers("""[{"name":"dit","group":"GROUP-MASTER"}]""")
+        f.stubRepositories("NotDit")
         val op = newOperation(RemoteOperationType.PUSH)
 
         shouldThrow<IllegalStateException> {
@@ -762,13 +762,13 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         }
     }
 
-    "createRepo throws when no env user for the datadatdat environment exists" {
+    "createRepo throws when no env user for the dit environment exists" {
         val server = DelphixRemoteServer()
         val f = FakeEngine()
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubGroups("master" to "GROUP-MASTER", "repositories" to "GROUP-REPOS")
-        f.stubContainers("""[{"name":"datadatdat","group":"GROUP-MASTER"}]""")
-        f.stubRepositories("Datadatdat")
+        f.stubContainers("""[{"name":"dit","group":"GROUP-MASTER"}]""")
+        f.stubRepositories("Dit")
         f.stubEnvUsers() // no env users
         val op = newOperation(RemoteOperationType.PUSH)
 
@@ -780,13 +780,13 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
     "createRepo provisions and disables the new container on success" {
         val server = DelphixRemoteServer()
         val f = FakeEngine()
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubGroups("master" to "GROUP-MASTER", "repositories" to "GROUP-REPOS")
-        // Need at least the datadatdat container in the master group for findInGroup("master","datadatdat")
+        // Need at least the dit container in the master group for findInGroup("master","dit")
         f.stubContainers(
-            """[{"name":"datadatdat","reference":"CT-DD","group":"GROUP-MASTER"}]""",
+            """[{"name":"dit","reference":"CT-DD","group":"GROUP-MASTER"}]""",
         )
-        f.stubRepositories("Datadatdat")
+        f.stubRepositories("Dit")
         f.stubEnvUsers("ENV-DD" to "ENVUSER-1")
 
         every { f.containerRepo.provision(any(), any<AppDataProvisionParameters>()) } returns
@@ -808,19 +808,19 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         verify(exactly = 1) { f.containerRepo.provision("provision", any()) }
         verify(exactly = 1) { f.sourceRepo.disable("SRC-NEW", any()) }
         // Should emit start + end progress
-        progress.map { it.first }.toList() shouldContain com.datadatdat.remote.RemoteProgress.START
-        progress.map { it.first }.toList() shouldContain com.datadatdat.remote.RemoteProgress.END
+        progress.map { it.first }.toList() shouldContain dev.dit.remote.RemoteProgress.START
+        progress.map { it.first }.toList() shouldContain dev.dit.remote.RemoteProgress.END
     }
 
     "createRepo throws when the engine doesn't return a source for the newly provisioned container" {
         val server = DelphixRemoteServer()
         val f = FakeEngine()
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubGroups("master" to "GROUP-MASTER", "repositories" to "GROUP-REPOS")
         f.stubContainers(
-            """[{"name":"datadatdat","reference":"CT-DD","group":"GROUP-MASTER"}]""",
+            """[{"name":"dit","reference":"CT-DD","group":"GROUP-MASTER"}]""",
         )
-        f.stubRepositories("Datadatdat")
+        f.stubRepositories("Dit")
         f.stubEnvUsers("ENV-DD" to "ENVUSER-1")
 
         every { f.containerRepo.provision(any(), any<AppDataProvisionParameters>()) } returns
@@ -871,8 +871,8 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
                 {"name":"myrepo","reference":"CT-REPO","group":"GROUP-REPOS"}
             ]""",
         )
-        f.stubRepositories("Datadatdat")
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubRepositories("Dit")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubEnvUsers("ENV-DD" to "ENVUSER-1")
         // For PULL, listSnapshots is consulted to find the commit
         f.stubSnapshots(
@@ -910,8 +910,8 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         f.stubContainers(
             """[{"name":"myrepo","reference":"CT-REPO","group":"GROUP-REPOS"}]""",
         )
-        f.stubRepositories("Datadatdat")
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubRepositories("Dit")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubEnvUsers("ENV-DD" to "ENVUSER-1")
         // No matching snapshot for commit-1
         f.stubSnapshots(
@@ -946,22 +946,22 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
             listOf(
                 // First call (repoExists -> false)
                 JSONObject(
-                    """{"result":[{"name":"datadatdat","reference":"CT-DD","group":"GROUP-MASTER"}]}""",
+                    """{"result":[{"name":"dit","reference":"CT-DD","group":"GROUP-MASTER"}]}""",
                 ),
-                // Second call (createRepo's findInGroup("master","datadatdat"))
+                // Second call (createRepo's findInGroup("master","dit"))
                 JSONObject(
-                    """{"result":[{"name":"datadatdat","reference":"CT-DD","group":"GROUP-MASTER"}]}""",
+                    """{"result":[{"name":"dit","reference":"CT-DD","group":"GROUP-MASTER"}]}""",
                 ),
                 // Third call (buildTimeflowPoint findInGroup("repositories","myrepo"))
                 JSONObject(
                     """{"result":[
-                        {"name":"datadatdat","reference":"CT-DD","group":"GROUP-MASTER"},
+                        {"name":"dit","reference":"CT-DD","group":"GROUP-MASTER"},
                         {"name":"myrepo","reference":"CT-REPO","group":"GROUP-REPOS"}
                     ]}""",
                 ),
             )
-        f.stubRepositories("Datadatdat")
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubRepositories("Dit")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubEnvUsers("ENV-DD" to "ENVUSER-1")
 
         // provision: first call is for createRepo, second is for syncDataStart
@@ -1138,7 +1138,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         ex.message!! shouldContain "engine not properly configured"
     }
 
-    "syncDataStart throws when no 'Datadatdat' repository (buildSourceConfig)" {
+    "syncDataStart throws when no 'Dit' repository (buildSourceConfig)" {
         val server = spyk(DelphixRemoteServer(), recordPrivateCalls = true)
         val f = FakeEngine()
         f.stubGroups(
@@ -1151,8 +1151,8 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         f.stubSnapshots(
             """[{"reference":"SNAP-1","metadata":{"repository":"myrepo","hash":"commit-1","metadata":{}}}]""",
         )
-        // No Datadatdat repository
-        f.stubRepositories("NotDatadatdat")
+        // No Dit repository
+        f.stubRepositories("NotDit")
         every { server["connect"](any<Map<String, Any>>(), any<Map<String, Any>>()) } returns f.engine
 
         val op = newOperation(RemoteOperationType.PULL)
@@ -1161,7 +1161,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         }
     }
 
-    "syncDataStart throws when 'datadatdat' environment is missing (buildSourceConfig)" {
+    "syncDataStart throws when 'dit' environment is missing (buildSourceConfig)" {
         val server = spyk(DelphixRemoteServer(), recordPrivateCalls = true)
         val f = FakeEngine()
         f.stubGroups(
@@ -1174,8 +1174,8 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         f.stubSnapshots(
             """[{"reference":"SNAP-1","metadata":{"repository":"myrepo","hash":"commit-1","metadata":{}}}]""",
         )
-        f.stubRepositories("Datadatdat")
-        f.stubEnvironments() // no 'datadatdat' env
+        f.stubRepositories("Dit")
+        f.stubEnvironments() // no 'dit' env
         every { server["connect"](any<Map<String, Any>>(), any<Map<String, Any>>()) } returns f.engine
 
         val op = newOperation(RemoteOperationType.PULL)
@@ -1184,7 +1184,7 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         }
     }
 
-    "syncDataStart throws when env user for 'datadatdat' is missing (buildSourceConfig)" {
+    "syncDataStart throws when env user for 'dit' is missing (buildSourceConfig)" {
         val server = spyk(DelphixRemoteServer(), recordPrivateCalls = true)
         val f = FakeEngine()
         f.stubGroups(
@@ -1197,8 +1197,8 @@ class DelphixRemoteServerEngineCallsTest : StringSpec({
         f.stubSnapshots(
             """[{"reference":"SNAP-1","metadata":{"repository":"myrepo","hash":"commit-1","metadata":{}}}]""",
         )
-        f.stubRepositories("Datadatdat")
-        f.stubEnvironments("datadatdat" to "ENV-DD")
+        f.stubRepositories("Dit")
+        f.stubEnvironments("dit" to "ENV-DD")
         f.stubEnvUsers() // no env user
         every { server["connect"](any<Map<String, Any>>(), any<Map<String, Any>>()) } returns f.engine
 
