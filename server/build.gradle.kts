@@ -28,7 +28,7 @@ dependencies {
     implementation(project(path = ":engine", configuration = "default"))
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.14.11")
-    testImplementation("com.squareup.okhttp3:mockwebserver:5.3.2")
+    testImplementation("com.squareup.okhttp3:mockwebserver:5.4.0")
 }
 
 // Jar configuration
