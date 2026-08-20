@@ -20,10 +20,10 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
     implementation("org.json:json:20260814")
-    implementation("com.squareup.okhttp3:okhttp:5.4.0")
+    implementation("com.squareup.okhttp3:okhttp:5.5.0")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.14.11")
-    testImplementation("com.squareup.okhttp3:mockwebserver:5.4.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:5.5.0")
 }
 
 // Only lint the files we author here. SDK objects/repos are generated.
