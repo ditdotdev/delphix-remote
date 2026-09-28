@@ -23,7 +23,7 @@ dependencies {
     implementation("dev.dit:remote-sdk:1.10.2")
     implementation("dev.dit:command-executor:1.10.2")
     implementation("com.google.code.gson:gson:2.14.0")
-    implementation("org.slf4j:slf4j-api:2.0.19")
+    implementation("org.slf4j:slf4j-api:2.0.20")
     implementation(project(path = ":engine", configuration = "default"))
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("io.mockk:mockk:1.14.11")
