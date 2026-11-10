@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("dev.dit:remote-sdk:1.10.3")
+    implementation("dev.dit:remote-sdk:1.10.4")
     implementation("dev.dit:command-executor:1.10.4")
     implementation("com.google.code.gson:gson:2.15.0")
     implementation("org.slf4j:slf4j-api:2.0.20")
