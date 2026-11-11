@@ -25,7 +25,7 @@ dependencies {
     implementation("org.json:json:20260814")
     implementation("com.squareup.okhttp3:okhttp:5.5.1")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-    testImplementation("io.mockk:mockk:1.14.11")
+    testImplementation("io.mockk:mockk:1.14.12")
     testImplementation("com.squareup.okhttp3:mockwebserver:5.5.1")
 }
 
